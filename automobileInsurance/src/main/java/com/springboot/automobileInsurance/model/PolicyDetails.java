@@ -1,4 +1,5 @@
 package com.springboot.automobileInsurance.model;
+
 import java.time.LocalDate;
 
 import jakarta.persistence.Column;
@@ -12,20 +13,20 @@ import jakarta.persistence.OneToOne;
 @Entity
 public class PolicyDetails {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
-    @Column(nullable = false)
-    private LocalDate startDate;
+	@Column(nullable = false)
+	private LocalDate startDate;
 
-    @Column(nullable = false)
-    private LocalDate endDate;
+	@Column(nullable = false)
+	private LocalDate endDate;
 
-    @Column(nullable = false)
-    private Double coverageAmount;
+	@Column(nullable = false)
+	private Double coverageAmount;
 
-    public VehicleDetails getVehicleDetails() {
+	public VehicleDetails getVehicleDetails() {
 		return vehicleDetails;
 	}
 
@@ -34,21 +35,21 @@ public class PolicyDetails {
 	}
 
 	@Column(nullable = false)
-    private String coverageType;
+	private String coverageType;
 
-    @Column(nullable = false)
-    private String status;
+	@Column(nullable = false)
+	private String status;
 
-    @Column(nullable = false)
-    private String createdAt;
+	@Column(nullable = false)
+	private String createdAt;
 
-    @ManyToOne
-    private Customer customer;
-    
-    @OneToOne
-    private VehicleDetails vehicleDetails;
-    
-    public int getId() {
+	@ManyToOne
+	private Customer customer;
+
+	@OneToOne
+	private VehicleDetails vehicleDetails;
+
+	public int getId() {
 		return id;
 	}
 

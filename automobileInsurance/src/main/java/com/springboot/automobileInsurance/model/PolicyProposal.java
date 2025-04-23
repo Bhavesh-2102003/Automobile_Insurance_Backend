@@ -118,7 +118,5 @@ public class PolicyProposal {
 	public void setPolicyDetails(PolicyDetails policyDetails) {
 		this.policyDetails = policyDetails;
 	}
-		
-	
-	
+
 }
