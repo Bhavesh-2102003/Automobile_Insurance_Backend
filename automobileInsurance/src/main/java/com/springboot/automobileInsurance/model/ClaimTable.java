@@ -45,6 +45,8 @@ public class ClaimTable {
 
 	    @Column(nullable = false)
 	    private LocalDateTime submittedAt;
+	    
+	   
 
 	    @ManyToOne
 	    private Customer customer;

@@ -2,8 +2,12 @@ package com.springboot.automobileInsurance.model;
 
 import java.time.LocalDateTime;
 
+import com.springboot.automobileInsurance.enums.ClaimStatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,9 +21,9 @@ public class ClaimTracking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
-    private String status;
-
+	@Enumerated(EnumType.STRING)
+	private ClaimStatus claimStatus;
+	
     @Column(nullable = false)
     private String remarks;
 
@@ -48,12 +52,13 @@ public class ClaimTracking {
 		this.id = id;
 	}
 
-	public String getStatus() {
-		return status;
+	
+	public ClaimStatus getClaimStatus() {
+		return claimStatus;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setClaimStatus(ClaimStatus claimStatus) {
+		this.claimStatus = claimStatus;
 	}
 
 	public String getRemarks() {

@@ -105,6 +105,6 @@ public class Proposal {
 		this.payment = payment;
 	}
 
-    
+   
     
 }

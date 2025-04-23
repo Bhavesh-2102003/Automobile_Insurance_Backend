@@ -10,4 +10,6 @@ public interface ClaimTrackingRepository extends JpaRepository<ClaimTracking, In
 
 	List<ClaimTracking> findByCustomerId(int cId);
 
+	List<ClaimTracking> findByStatus(String claimStatus);
+
 }
