@@ -23,15 +23,15 @@ public class ClaimTrackingController {
 		return claimTrackingService.getClaimTracking(cId);
 	}
 	
-	@PutMapping("/api/claim/tracking/status")
+	@PutMapping("/api/claim/tracking/status/{id}")
 	public ClaimTracking getClaimById(@PathVariable int id) {
 		return claimTrackingService.getClaimById(id);
 	}
 	
-	@GetMapping("/api/claim/tracking/{cId}")
-	public List<ClaimTracking> getByClaimStatus(@PathVariable String claimStatus)
+	@GetMapping("/api/claim/tracking/{status}")
+	public List<ClaimTracking> getByClaimStatus(@PathVariable String status)
 	{
-		return claimTrackingService.getByClaimStatus(claimStatus);
+		return claimTrackingService.getByClaimStatus(status);
 	}
 	
 }

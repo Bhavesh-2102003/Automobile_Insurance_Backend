@@ -28,10 +28,10 @@ public class ClaimTrackingService {
 			  throw new InvalidIDException("Invalid id");
 		return optional.get();
 
-	 }
+	}
 
-	public List<ClaimTracking> getByClaimStatus(String claimStatus) {
-			return claimTrackingRepository.findByStatus(claimStatus);
+	public List<ClaimTracking> getByClaimStatus(String status) {
+			return claimTrackingRepository.findByStatus(status);
 		
 	}
 		  
