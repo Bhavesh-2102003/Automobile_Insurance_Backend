@@ -34,9 +34,7 @@ public class Payment {
     @ManyToOne
     private ClaimTable claimTable;
 
-    @OneToOne
-    private Proposal proposal;
-
+  
     @OneToOne
     private PolicyRenewalRequest policyRenewalRequest;
 
@@ -112,13 +110,6 @@ public class Payment {
 		this.claimTable = claimTable;
 	}
 
-	public Proposal getProposal() {
-		return proposal;
-	}
-
-	public void setProposal(Proposal proposal) {
-		this.proposal = proposal;
-	}
 
 	public PolicyRenewalRequest getPolicyRenewalRequest() {
 		return policyRenewalRequest;
