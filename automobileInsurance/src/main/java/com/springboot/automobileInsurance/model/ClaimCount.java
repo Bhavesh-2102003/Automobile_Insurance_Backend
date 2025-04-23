@@ -16,11 +16,11 @@ public class ClaimCount {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	private String approved;
+	private int approvedCount;
 	
-	private String pending;
+	private int pendingCount;
 	
-	private String rejected;
+	private int rejectedCount;
 	
 	
 	@OneToOne
@@ -37,33 +37,33 @@ public class ClaimCount {
 	}
 
 
-	public String getApproved() {
-		return approved;
+	public int getApprovedCount() {
+		return approvedCount;
 	}
 
 
-	public void setApproved(String approved) {
-		this.approved = approved;
+	public void setApprovedCount(int approvedCount) {
+		this.approvedCount = approvedCount;
 	}
 
 
-	public String getPending() {
-		return pending;
+	public int getPendingCount() {
+		return pendingCount;
 	}
 
 
-	public void setPending(String pending) {
-		this.pending = pending;
+	public void setPendingCount(int pendingCount) {
+		this.pendingCount = pendingCount;
 	}
 
 
-	public String getRejected() {
-		return rejected;
+	public int getRejectedCount() {
+		return rejectedCount;
 	}
 
 
-	public void setRejected(String rejected) {
-		this.rejected = rejected;
+	public void setRejectedCount(int rejectedCount) {
+		this.rejectedCount = rejectedCount;
 	}
 
 
@@ -75,6 +75,10 @@ public class ClaimCount {
 	public void setClaimTable(ClaimTable claimTable) {
 		this.claimTable = claimTable;
 	}
+
+
+
+
 	
 	
 
