@@ -19,6 +19,29 @@ public class Report {
 	
 	private int totalValueOfClaims;
 	
+	private String topState;
+	
+	private String topCity;
+	
+	
+	
+	
+	public String getTopState() {
+		return topState;
+	}
+
+	public void setTopState(String topState) {
+		this.topState = topState;
+	}
+
+	public String getTopCity() {
+		return topCity;
+	}
+
+	public void setTopCity(String topCity) {
+		this.topCity = topCity;
+	}
+
 	@OneToOne
 	private ClaimTable claimTable;
 
