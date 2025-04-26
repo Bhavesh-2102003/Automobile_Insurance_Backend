@@ -36,7 +36,7 @@ public class SecurityConfig {
 				.requestMatchers("/api/auth/signup").permitAll()
 				.requestMatchers("/api/auth/login").authenticated()
 				.requestMatchers("/api/auth/hello").authenticated()
-				.requestMatchers("/api/customer/add").authenticated()
+				.requestMatchers("/api/customer/add").permitAll()
 				.requestMatchers("/api/vehicle/add").authenticated()
 				.anyRequest().permitAll()
 			)

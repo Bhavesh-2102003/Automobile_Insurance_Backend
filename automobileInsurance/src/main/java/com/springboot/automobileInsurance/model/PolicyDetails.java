@@ -2,8 +2,13 @@ package com.springboot.automobileInsurance.model;
 
 import java.time.LocalDate;
 
+import com.springboot.automobileInsurance.enums.PolicyStatus;
+import com.springboot.automobileInsurance.enums.PolicyType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,35 +19,36 @@ public class PolicyDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private int id;  // findById
 	
-	private String name;
+	@Column(nullable = false)
+	private String name;  // findByName
 
 	@Column(nullable = false)
 	private LocalDate startDate;
 
 	@Column(nullable = false)
 	private LocalDate endDate;
+	
+	@Enumerated(EnumType.STRING)
+	private PolicyType policyType; //findByPolicyType
 
 	@Column(nullable = false)
 	private Double coverageAmount;
 
 	@Column(nullable = false)
-	private String coverageType;
-
-	@Column(nullable = false)
-	private String status;
-
-	@Column(nullable = false)
 	private String createdAt;
+	
+	@Enumerated(EnumType.STRING)
+	private PolicyStatus policyStatus; //findByPolicyStatus
 
-	@ManyToOne
+	@ManyToOne // List<Customer>
 	private Customer customer;
 
-	@ManyToOne
+	@ManyToOne // List<VehicleDetails>
 	private VehicleDetails vehicleDetails;
 	
-	@ManyToOne
+	@ManyToOne // List<Officer>
 	private Officer officer;
 
 	public int getId() {
@@ -51,6 +57,14 @@ public class PolicyDetails {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public LocalDate getStartDate() {
@@ -69,28 +83,20 @@ public class PolicyDetails {
 		this.endDate = endDate;
 	}
 
+	public PolicyType getPolicyType() {
+		return policyType;
+	}
+
+	public void setPolicyType(PolicyType policyType) {
+		this.policyType = policyType;
+	}
+
 	public Double getCoverageAmount() {
 		return coverageAmount;
 	}
 
 	public void setCoverageAmount(Double coverageAmount) {
 		this.coverageAmount = coverageAmount;
-	}
-
-	public String getCoverageType() {
-		return coverageType;
-	}
-
-	public void setCoverageType(String coverageType) {
-		this.coverageType = coverageType;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
 	}
 
 	public String getCreatedAt() {
@@ -101,28 +107,20 @@ public class PolicyDetails {
 		this.createdAt = createdAt;
 	}
 
+	public PolicyStatus getPolicyStatus() {
+		return policyStatus;
+	}
+
+	public void setPolicyStatus(PolicyStatus policyStatus) {
+		this.policyStatus = policyStatus;
+	}
+
 	public Customer getCustomer() {
 		return customer;
 	}
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
-	}
-	
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Officer getOfficer() {
-		return officer;
-	}
-
-	public void setOfficer(Officer officer) {
-		this.officer = officer;
 	}
 
 	public VehicleDetails getVehicleDetails() {
@@ -132,6 +130,15 @@ public class PolicyDetails {
 	public void setVehicleDetails(VehicleDetails vehicleDetails) {
 		this.vehicleDetails = vehicleDetails;
 	}
+
+	public Officer getOfficer() {
+		return officer;
+	}
+
+	public void setOfficer(Officer officer) {
+		this.officer = officer;
+	}
+	
 	
 
-}
+	}

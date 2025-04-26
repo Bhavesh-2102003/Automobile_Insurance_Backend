@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springboot.automobileInsurance.enums.PolicyStatus;
+import com.springboot.automobileInsurance.enums.PolicyType;
 import com.springboot.automobileInsurance.model.Customer;
 import com.springboot.automobileInsurance.model.PolicyDetails;
 import com.springboot.automobileInsurance.model.VehicleDetails;
@@ -46,8 +48,24 @@ public class PolicyDetailsController {
 	}
 	
 	@GetMapping("/api/policy/getAll-vehicle/{vId}")
-	public List<PolicyDetails> getAllVehicleByPolicies(@RequestBody PolicyDetails policyDetails,@PathVariable int vId){
+	public List<PolicyDetails> getAllVehicleByPolicies(@RequestBody PolicyDetails policyDetails,
+			@PathVariable int vId){
+		
 		return policyDetailsService.getAllVehicleByPolicies(vId);
 	}
-
+	
+	@GetMapping("/api/policy/status/{status}")
+	public List<PolicyDetails> getPoliciesByStatus(@RequestBody PolicyDetails policyDetails,
+			@PathVariable PolicyStatus policyStatus){
+		
+		return policyDetailsService.getPoliciesByStatus(policyStatus);
+	}
+	
+	@GetMapping("/api/policy/type/{type}")
+	public List<PolicyDetails> getPoliciesByType(@RequestBody PolicyDetails policyDetails,
+			@PathVariable PolicyType policyType){
+		
+		return policyDetailsService.getPoliciesByType(policyType);
+	}
+	
 }
