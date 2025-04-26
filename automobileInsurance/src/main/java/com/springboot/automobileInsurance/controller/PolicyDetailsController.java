@@ -19,13 +19,13 @@ import com.springboot.automobileInsurance.service.VehicleDetailsService;
 @RestController
 public class PolicyDetailsController {
 	@Autowired
-	PolicyDetailsService policyDetailsService;
+	private PolicyDetailsService policyDetailsService;
 
 	@Autowired
-	CustomerService customerService;
+	private CustomerService customerService;
 
 	@Autowired
-	VehicleDetailsService vehicleDetailsService;
+	private VehicleDetailsService vehicleDetailsService;
 
 	@PostMapping("/api/policy/save/{cId}/{vId}")
 	public PolicyDetails addPolicy(@PathVariable int cId, @PathVariable int vId,
@@ -40,9 +40,14 @@ public class PolicyDetailsController {
 
 	}
 
-	@GetMapping("/api/policy/getAll/{cId}")
+	@GetMapping("/api/policy/getAll-customer/{cId}")
 	public List<PolicyDetails> getAllPolicies(@PathVariable int cId) {
 		return policyDetailsService.findByCustomerId(cId);
+	}
+	
+	@GetMapping("/api/policy/getAll-vehicle/{vId}")
+	public List<PolicyDetails> getAllVehicleByPolicies(@RequestBody PolicyDetails policyDetails,@PathVariable int vId){
+		return policyDetailsService.getAllVehicleByPolicies(vId);
 	}
 
 }

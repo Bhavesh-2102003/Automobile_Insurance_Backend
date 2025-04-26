@@ -5,18 +5,20 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.springboot.automobileInsurance.model.Officer;
 import com.springboot.automobileInsurance.model.PolicyDetails;
 import com.springboot.automobileInsurance.repository.CustomerRepository;
+import com.springboot.automobileInsurance.repository.OfficerRepository;
 import com.springboot.automobileInsurance.repository.PolicyDetailsRepository;
 
 @Service
 public class PolicyDetailsService {
 
 	@Autowired
-    PolicyDetailsRepository policyDetailsRepository;
-
+     private PolicyDetailsRepository policyDetailsRepository;
+	
 	@Autowired
-    CustomerRepository customerRepository;
+	private OfficerRepository officerRepository;
 
    
 	public List<PolicyDetails> findByCustomerId(int cId) {
@@ -26,8 +28,24 @@ public class PolicyDetailsService {
 
 
 	public PolicyDetails addPolicy(PolicyDetails policyDetails) {
+		//extract the officer from the policy
+		Officer officer = policyDetails.getOfficer();
+		
+		//save these to the respective repo to generate the id 
+		
+		officerRepository.save(officer);
+		
+		//restore the saved details back to the policyDetails
+		
+		policyDetails.setOfficer(officer);
 		
 		return policyDetailsRepository.save(policyDetails);
+	}
+
+
+	public List<PolicyDetails> getAllVehicleByPolicies(int vId) {
+		
+		return policyDetailsRepository.findByVehicleDetailsId(vId);
 	}
 
 }

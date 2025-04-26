@@ -8,7 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 
 @Entity
 public class PolicyDetails {
@@ -16,6 +15,8 @@ public class PolicyDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	
+	private String name;
 
 	@Column(nullable = false)
 	private LocalDate startDate;
@@ -25,14 +26,6 @@ public class PolicyDetails {
 
 	@Column(nullable = false)
 	private Double coverageAmount;
-
-	public VehicleDetails getVehicleDetails() {
-		return vehicleDetails;
-	}
-
-	public void setVehicleDetails(VehicleDetails vehicleDetails) {
-		this.vehicleDetails = vehicleDetails;
-	}
 
 	@Column(nullable = false)
 	private String coverageType;
@@ -46,8 +39,11 @@ public class PolicyDetails {
 	@ManyToOne
 	private Customer customer;
 
-	@OneToOne
+	@ManyToOne
 	private VehicleDetails vehicleDetails;
+	
+	@ManyToOne
+	private Officer officer;
 
 	public int getId() {
 		return id;
@@ -112,5 +108,30 @@ public class PolicyDetails {
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Officer getOfficer() {
+		return officer;
+	}
+
+	public void setOfficer(Officer officer) {
+		this.officer = officer;
+	}
+
+	public VehicleDetails getVehicleDetails() {
+		return vehicleDetails;
+	}
+
+	public void setVehicleDetails(VehicleDetails vehicleDetails) {
+		this.vehicleDetails = vehicleDetails;
+	}
+	
 
 }
