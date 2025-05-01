@@ -1,10 +1,13 @@
 import { Navigate, Routes, Route } from "react-router-dom";
 import OfficerLogin from "./components/auth/OfficerLogin";
 import OfficerSignup from "./components/auth/OfficerSignup";
+import OfficerProfile from "./components/auth/OfficerProfile";
 import OfficerDashboard from "./officer/OfficerDashboard";
 import Policy from "./officer/Policy";
 import AddPolicy from "./officer/AddPolicy";
+import AddPolicyForm from "./officer/AddPolicyForm";
 import CustomerList from "./officer/CustomerList";
+
 
 function App() {
   return (
@@ -15,10 +18,9 @@ function App() {
       <Route path="officer/dashboard" element={<OfficerDashboard />} />
       <Route path="officer/policies" element={<Policy />} />
       <Route path="officer/add-policy" element={<AddPolicy />} />
-      {/* Add this route for CustomerList */}
-      <Route path="officer/CustomerList" element={<CustomerList />} />
-      {/* Optionally, keep the lowercase version for backward compatibility */}
-      <Route path="officer/customers" element={<CustomerList />} />
+      <Route path="officer/add-policy-form" element={<AddPolicyForm />} />
+      <Route path="officer/customer" element={<CustomerList />} />
+      <Route path="officer/profile" element={<OfficerProfile />} />
     </Routes>
   );
 }

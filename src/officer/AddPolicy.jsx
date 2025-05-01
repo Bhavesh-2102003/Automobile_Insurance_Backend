@@ -1,217 +1,97 @@
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-
+import { motion } from "framer-motion";
+import AddPolicyForm from "./AddPolicyForm";
+import "./AddPolicy.css";
 
 function AddPolicy() {
-  const [form, setForm] = useState({
-    name: "",
-    description: "",
-    startDate: "",
-    endDate: "",
-    policyType: "OWN_DAMAGE",
-    coverageAmount: "",
-    price: "",
-    duration: "",
-    createdAt: "",
-    policyStatus: "PENDING",
-    eligibilityCriteria: "",
-    features: "",
-    categories: "BIKE",
-    minCoverageAmount: "",
-    maxCoverageAmount: "",
-    termsAndConditions: ""
-  });
+  const [policies, setPolicies] = useState([]);
+  const [selectedPolicy, setSelectedPolicy] = useState(null);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const token = localStorage.getItem('token');
+  const username = localStorage.getItem('username');
+  useEffect(() => {
+    fetchPolicies();
+  }, []);
 
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage("");
+  const fetchPolicies = async () => {
     try {
-      await axios.post("http://localhost:8087/api/policy-template/add", {
-        name: form.name,
-        description: form.description,
-        startDate: form.startDate,
-        endDate: form.endDate,
-        policyType: form.policyType,
-        coverageAmount: parseFloat(form.coverageAmount),
-        price: parseFloat(form.price),
-        duration: parseInt(form.duration),
-        createdAt: form.createdAt,
-        policyStatus: form.policyStatus,
-        eligibilityCriteria: form.eligibilityCriteria,
-        features: form.features,
-        categories: form.categories,
-        minCoverageAmount: parseFloat(form.minCoverageAmount),
-        maxCoverageAmount: parseFloat(form.maxCoverageAmount),
-        termsAndConditions: form.termsAndConditions
+      const response = await axios.post("http://localhost:8087/api/policy-template/all", {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
       });
-      setMessage("Policy template added successfully!");
-      setForm({
-        name: "",
-        description: "",
-        startDate: "",
-        endDate: "",
-        policyType: "OWN_DAMAGE",
-        coverageAmount: "",
-        price: "",
-        duration: "",
-        createdAt: "",
-        policyStatus: "PENDING",
-        eligibilityCriteria: "",
-        features: "",
-        categories: "BIKE",
-        minCoverageAmount: "",
-        maxCoverageAmount: "",
-        termsAndConditions: ""
-      });
-      dispatch(fetchPolicyCount()); // Refresh dashboard count after add
-    } catch (err) {
-      console.log(err);
-      setMessage(err.response?.data || "Error adding policy template");
-    } finally {
-      setLoading(false);
+      setPolicies(response.data);
+    } catch (error) {
+      console.error("Error fetching policies:", error);
     }
   };
 
-  return (
-    <div className="container mt-5" style={{ maxWidth: '95vw', fontSize: '1.2rem' }}>
-      <h1 className="mb-4" style={{ fontSize: '2.2rem', fontWeight: 700 }}>Add Policy Template</h1>
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8087/api/policy-template/delete/${id}`, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      setPolicies(policies.filter(policy => policy.id !== id));
+    } catch (error) {
+      console.error("Error deleting policy:", error);
+    }
+  };
 
-      <div className="table-responsive" style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.12)', borderRadius: '16px', padding: '32px', background: '#fff' }}>
-        <form onSubmit={handleSubmit}>
-          <div className="row g-3">
-            <div className="col-md-6">
-              <div className="mb-2">
-                <label>Policy Name</label>
-                <input type="text" name="name" value={form.name} className="form-control" onChange={handleChange} required />
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="mb-2">
-                <label>Description</label>
-                <textarea name="description" value={form.description} className="form-control" onChange={handleChange} rows="2"></textarea>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="mb-2">
-                <label>Start Date</label>
-                <input type="date" name="startDate" value={form.startDate} className="form-control" onChange={handleChange} required />
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="mb-2">
-                <label>End Date</label>
-                <input type="date" name="endDate" value={form.endDate} className="form-control" onChange={handleChange} required />
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="mb-2">
-                <label>Policy Type</label>
-                <select name="policyType" value={form.policyType} className="form-control" onChange={handleChange} required>
-                  <option value="OWN_DAMAGE">Own Damage</option>
-                  <option value="THIRD_PARTY">Third Party</option>
-                  <option value="COMPREHENSIVE">Comprehensive</option>
-                  <option value="ZERO_DEPRECIATION">Zero Depreciation</option>
-                </select>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="mb-2">
-                <label>Category</label>
-                <select name="categories" value={form.categories} className="form-control" onChange={handleChange} required>
-                  <option value="BIKE">Bike</option>
-                  <option value="CAR">Car</option>
-                </select>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="mb-2">
-                <label>Coverage Amount</label>
-                <input type="number" name="coverageAmount" value={form.coverageAmount} className="form-control" onChange={handleChange} required />
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="mb-2">
-                <label>Price</label>
-                <input type="number" name="price" value={form.price} className="form-control" onChange={handleChange} required />
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="mb-2">
-                <label>Duration (months)</label>
-                <input type="number" name="duration" value={form.duration} className="form-control" onChange={handleChange} required />
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="mb-2">
-                <label>Created At</label>
-                <input type="date" name="createdAt" value={form.createdAt} className="form-control" onChange={handleChange} required />
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="mb-2">
-                <label>Policy Status</label>
-                <select name="policyStatus" value={form.policyStatus} className="form-control" onChange={handleChange} required>
-                  <option value="PENDING">Pending</option>
-                  <option value="APPROVED">Approved</option>
-                  <option value="REJECTED">Rejected</option>
-                </select>
-              </div>
-            </div>
-            <div className="col-md-9">
-              <div className="mb-2">
-                <label>Eligibility Criteria</label>
-                <textarea name="eligibilityCriteria" value={form.eligibilityCriteria} className="form-control" onChange={handleChange} rows="2"></textarea>
-              </div>
-            </div>
-            <div className="col-md-9">
-              <div className="mb-2">
-                <label>Features</label>
-                <textarea name="features" value={form.features} className="form-control" onChange={handleChange} rows="2"></textarea>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="mb-2">
-                <label>Min Coverage Amount</label>
-                <input type="number" name="minCoverageAmount" value={form.minCoverageAmount} className="form-control" onChange={handleChange} required />
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="mb-2">
-                <label>Max Coverage Amount</label>
-                <input type="number" name="maxCoverageAmount" value={form.maxCoverageAmount} className="form-control" onChange={handleChange} required />
-              </div>
-            </div>
-            <div className="col-12">
-              <div className="mb-2">
-                <label>Terms and Conditions</label>
-                <textarea name="termsAndConditions" value={form.termsAndConditions} className="form-control" onChange={handleChange} rows="3"></textarea>
-              </div>
-            </div>
-            <div className="col-12">
-              <button type="submit" className="btn btn-primary" disabled={loading}>
-                {loading ? (
-                  <>
-                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                    Adding...
-                  </>
-                ) : (
-                  'Add Policy Template'
-                )}
-              </button>
-            </div>
-          </div>
-        </form>
+  const PolicyCard = ({ policy }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="policy-card"
+      onClick={() => setSelectedPolicy(policy)}
+    >
+      <h4>{policy.name}</h4>
+      <p><strong>Type:</strong> {policy.policyType}</p>
+      <p><strong>Price:</strong> ${policy.price}</p>
+      <p><strong>Duration:</strong> {policy.duration} months</p>
+      <p><strong>Categories:</strong> {policy.categories}</p>
+      <button onClick={() => handleDelete(policy.id)}>Delete</button>
+    </motion.div>
+  );
+
+  return (
+    <div className="add-policy-container">
+      <div className="header-section">
+        <h1>Policy Management</h1>
+        <button 
+          onClick={() => setShowAddForm(true)}
+          className="add-policy-btn"
+        >
+          Add New Policy
+        </button>
       </div>
+
+      {showAddForm && <AddPolicyForm onPolicyAdded={() => { fetchPolicies(); setShowAddForm(false); }} />}
+
+      <div className="policies-grid">
+        {policies.map((policy) => (
+          <PolicyCard key={policy.id} policy={policy} />
+        ))}
+      </div>
+
+      {selectedPolicy && (
+        <div className="policy-details">
+          <h3>{selectedPolicy.name}</h3>
+          <p><strong>Type:</strong> {selectedPolicy.policyType}</p>
+          <p><strong>Price:</strong> ${selectedPolicy.price}</p>
+          <p><strong>Duration:</strong> {selectedPolicy.duration} months</p>
+          <p><strong>Categories:</strong> {selectedPolicy.categories}</p>
+          <p><strong>Description:</strong> {selectedPolicy.description}</p>
+          <p><strong>Eligibility Criteria:</strong> {selectedPolicy.eligibilityCriteria}</p>
+          <p><strong>Features:</strong> {selectedPolicy.features}</p>
+          <p><strong>Terms and Conditions:</strong> {selectedPolicy.termsAndConditions}</p>
+          <p><strong>Min Coverage Amount:</strong> {selectedPolicy.minCoverageAmount}</p>
+          <p><strong>Max Coverage Amount:</strong> {selectedPolicy.maxCoverageAmount}</p>
+          <button onClick={() => setSelectedPolicy(null)}>Close</button>
+        </div>
+      )}
     </div>
   );
 }

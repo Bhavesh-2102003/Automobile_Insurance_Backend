@@ -15,15 +15,15 @@ function OfficerDashboard() {
   });
 
   useEffect(() => {
-    // Fetch policy stats and customer count from backend (replace URLs with your API endpoints)
+  
     async function fetchStats() {
       try {
-        const policyRes = await axios.get("http://localhost:8087/api/policy/stats");
+        const claimRes = await axios.get("http://localhost:8087/api/claim/stats");
         setStats(prev => ({
           ...prev,
-          approved: policyRes.data.approved,
-          rejected: policyRes.data.rejected,
-          pending: policyRes.data.pending
+          approved: claimRes.data.approved,
+          rejected: claimRes.data.rejected,
+          pending: claimRes.data.pending
         }));
       } catch (err) {
         // fallback or show error
@@ -61,18 +61,11 @@ function OfficerDashboard() {
           <div className="col-md-3">
             <div className="card shadow border-0 text-center">
               <div className="card-body">
-                <h5 className="card-title text-warning">Pending</h5>
-                <p className="display-5 fw-bold">{stats.pending}</p>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="card shadow border-0 text-center">
-              <div className="card-body">
                 <h5 className="card-title text-primary">Total Customers</h5>
                 <p className="display-5 fw-bold">{stats.totalCustomers}</p>
               </div>
             </div>
+          </div>
           </div>
         </div>
         <div className="row mt-4">
@@ -81,7 +74,7 @@ function OfficerDashboard() {
               <div className="card-body">
                 <h5 className="card-title">Manage Customers</h5>
                 <p>View, update, or delete customers.</p>
-                <Link to="/officer/customers" className="btn btn-primary">Go to Customers</Link>
+                <Link to="officer/customer" className="btn btn-primary">Go to Customers</Link>
               </div>
             </div>
           </div>
@@ -105,7 +98,6 @@ function OfficerDashboard() {
           </div>
         </div>
       </div>
-    </div>
   );
 }
 
