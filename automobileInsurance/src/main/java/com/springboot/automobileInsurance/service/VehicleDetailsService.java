@@ -21,10 +21,6 @@ public class VehicleDetailsService {
 		return vehicleDetailsRepository.save(vehicleDetails);
 	}
 	
-	public VehicleDetails findByContact(String contact)
-	{
-		return vehicleDetailsRepository.findByContact(contact);
-	}
 
 	public VehicleDetails findById(int vId) {
 		

@@ -17,14 +17,27 @@ public class PolicyDetails {
     private int id;
 
     @Column(nullable = false)
-    private LocalDate startDate;
+    private LocalDate startDate=LocalDate.now();
 
     @Column(nullable = false)
     private LocalDate endDate;
 
     @Column(nullable = false)
-    private Double coverageAmount;
+    private Double coverageAmount;  
 
+	@Column(nullable = false)
+    private String coverageType;
+
+    @Column(nullable = false)
+    private String status="Active";
+
+
+    @ManyToOne
+    private Customer customer;
+    
+    @OneToOne
+    private VehicleDetails vehicleDetails;
+    
     public VehicleDetails getVehicleDetails() {
 		return vehicleDetails;
 	}
@@ -32,21 +45,6 @@ public class PolicyDetails {
 	public void setVehicleDetails(VehicleDetails vehicleDetails) {
 		this.vehicleDetails = vehicleDetails;
 	}
-
-	@Column(nullable = false)
-    private String coverageType;
-
-    @Column(nullable = false)
-    private String status;
-
-    @Column(nullable = false)
-    private String createdAt;
-
-    @ManyToOne
-    private Customer customer;
-    
-    @OneToOne
-    private VehicleDetails vehicleDetails;
     
     public int getId() {
 		return id;
@@ -96,13 +94,6 @@ public class PolicyDetails {
 		this.status = status;
 	}
 
-	public String getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(String createdAt) {
-		this.createdAt = createdAt;
-	}
 
 	public Customer getCustomer() {
 		return customer;

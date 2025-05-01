@@ -3,6 +3,7 @@ package com.springboot.automobileInsurance.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,8 @@ import com.springboot.automobileInsurance.service.PolicyDetailsService;
 import com.springboot.automobileInsurance.service.VehicleDetailsService;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173/")
+
 public class PolicyDetailsController {
 	@Autowired
 	PolicyDetailsService policyDetailsService;
@@ -27,13 +30,11 @@ public class PolicyDetailsController {
 	@Autowired
 	VehicleDetailsService vehicleDetailsService;
 	
-	@PostMapping("/api/policy/save/{cId}/{vId}")
-	public PolicyDetails addPolicy(@PathVariable int cId,
-									@PathVariable int vId,
-									@RequestBody PolicyDetails policyDetails)
+	@PostMapping("/api/policy/save")
+	public PolicyDetails addPolicy(@RequestBody PolicyDetails policyDetails)
 	{
-		Customer customer=customerService.findById(cId);
-		VehicleDetails vehicleDetails=vehicleDetailsService.findById(vId);
+		Customer customer=customerService.findById(policyDetails.getCustomer().getId());
+		VehicleDetails vehicleDetails=vehicleDetailsService.findById(policyDetails.getVehicleDetails().getId());
 		
 		policyDetails.setCustomer(customer);
 		policyDetails.setVehicleDetails(vehicleDetails);
@@ -47,6 +48,8 @@ public class PolicyDetailsController {
 	{
 		return policyDetailsService.findByCustomerId(cId);
 	}
+	
+	
 	
 	
 }

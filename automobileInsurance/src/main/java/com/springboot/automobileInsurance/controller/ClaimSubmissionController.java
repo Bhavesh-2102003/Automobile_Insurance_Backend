@@ -25,16 +25,16 @@ public class ClaimSubmissionController {
 	@Autowired
 	VehicleDetailsService vehicleDetailsService;
 	
-	@PostMapping("/api/claim/submit/{contact}")
-	public ClaimTable submitClaim(@RequestBody ClaimTable claimTable,
-									@PathVariable String contact)
-	{
-		Customer customer=customerService.findByContact(contact);
-		VehicleDetails vehicleDetails=vehicleDetailsService.findByContact(contact);
-		
-		claimTable.setCustomer(customer);
-		claimTable.setVehicleDetails(vehicleDetails);
-		
-		return claimSubmissionService.submitClaim(claimTable);
-	}
+//	@PostMapping("/api/claim/submit/{contact}")
+//	public ClaimTable submitClaim(@RequestBody ClaimTable claimTable,
+//									@PathVariable String contact)
+//	{
+//		Customer customer=customerService.findByContact(contact);
+//		VehicleDetails vehicleDetails=vehicleDetailsService.findByContact(contact);
+//		
+//		claimTable.setCustomer(customer);
+//		claimTable.setVehicleDetails(vehicleDetails);
+//		
+//		return claimSubmissionService.submitClaim(claimTable);
+//	}
 }

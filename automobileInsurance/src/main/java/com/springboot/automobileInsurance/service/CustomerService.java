@@ -6,16 +6,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.springboot.automobileInsurance.exception.InvalidIDException;
+import com.springboot.automobileInsurance.exception.InvalidUsernameException;
 import com.springboot.automobileInsurance.model.Customer;
+import com.springboot.automobileInsurance.model.User;
 import com.springboot.automobileInsurance.repository.CustomerRepository;
 
 @Service
 public class CustomerService {
+
 	
 	@Autowired
 	CustomerRepository customerRepository;
+	
+    CustomerService(AuthService authService) {
+        this.authService = authService;
+    }
 
-	public Customer addCustomer(Customer customer) {
+	@Autowired
+	AuthService authService;
+
+	public Customer addCustomer(Customer customer) throws InvalidUsernameException {
+		
+		User user = customer.getUser();
+		
+		user=authService.signUp(user);
+		
+		customer.setUser(user);
 		
 		return customerRepository.save(customer);
 	}
@@ -34,6 +50,10 @@ public class CustomerService {
 		}
 		
 		return optional.get();
+	}
+
+	public Customer findByUserId(int uId) {
+		return customerRepository.findByUserId(uId);
 	}
 
 }

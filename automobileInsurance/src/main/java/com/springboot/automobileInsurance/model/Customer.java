@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Customer {
@@ -17,7 +18,7 @@ public class Customer {
     @Column(length = 45, nullable = false)
     private String firstName;
 
-    @Column(length = 45, nullable = false)
+    @Column(length = 45)
     private String lastName;
 
     @Column(length = 45, nullable = false, unique = true)
@@ -58,9 +59,20 @@ public class Customer {
     @Column(length = 45, nullable = false)
     private String contact;
     
+    @OneToOne
+    private User user;
+    
     
 	public Integer getId() {
 		return id;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public void setId(Integer id) {
