@@ -1,5 +1,6 @@
 package com.springboot.automobileInsurance.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -20,6 +21,52 @@ public class ClaimTable {
 	    private String claimType;
 
 
+	    @Column(nullable = false)
+	    private String location;
+	    
+	    
+	    @Column(nullable = false)
+	    private String damageDescription;
+	    
+	    @Column(nullable = false)
+	    private LocalDate accidentDate;
+	    
+	    @Column(nullable = false)
+	    private LocalDateTime submittedAt=LocalDateTime.now();
+	    
+	    @Column(nullable=false)
+	    private String imageUrl;
+	    
+	    @Column(nullable=false)
+	    private String status;
+	    
+	    @OneToOne
+	    PolicyDetails policyDetails;
+	    
+
+		@ManyToOne
+	    private Customer customer;
+	    
+	    @OneToOne
+	    private VehicleDetails vehicleDetails;
+	    
+	    public PolicyDetails getPolicyDetails() {
+			return policyDetails;
+		}
+
+		public void setPolicyDetails(PolicyDetails policyDetails) {
+			this.policyDetails = policyDetails;
+		}
+
+		public String getStatus() {
+	    	return status;
+	    }
+	    
+	    public void setStatus(String status) {
+	    	this.status = status;
+	    }
+	    
+	    
 	    public String getImageUrl() {
 			return imageUrl;
 		}
@@ -28,27 +75,7 @@ public class ClaimTable {
 			this.imageUrl = imageUrl;
 		}
 
-		@Column(nullable = false)
-	    private String location;
 
-
-	    @Column(nullable = false)
-	    private String damageDescription;
-
-	    @Column(nullable = false)
-	    private LocalDateTime accidentDate;
-
-	    @Column(nullable = false)
-	    private LocalDateTime submittedAt;
-	    
-	    @Column(nullable=false)
-	    private String imageUrl;
-
-	    @ManyToOne
-	    private Customer customer;
-
-	    @OneToOne
-	    private VehicleDetails vehicleDetails;
 
 		public Integer getId() {
 			return id;

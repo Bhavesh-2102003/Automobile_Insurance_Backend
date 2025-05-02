@@ -49,6 +49,12 @@ public class PolicyDetailsController {
 		return policyDetailsService.findByCustomerId(cId);
 	}
 	
+	@GetMapping("/api/policy/getByVehicle/{vId}")
+	public PolicyDetails getPolicyByVehicle(@PathVariable int vId)
+	{
+		return policyDetailsService.findByVehicleId(vId);
+	}
+	
 	
 	
 	

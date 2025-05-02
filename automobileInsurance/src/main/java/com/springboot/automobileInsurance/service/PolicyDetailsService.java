@@ -23,6 +23,11 @@ public class PolicyDetailsService {
 		
 		return policyDetailsRepository.findByCustomerId(cId);
 	}
+	
+	public PolicyDetails findByVehicleId(int vId) {
+		
+		return policyDetailsRepository.findByVehicleDetailsId(vId);
+	}
 
 
 	public PolicyDetails addPolicy(PolicyDetails policyDetails) {
