@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,5 +50,10 @@ public class ClaimSubmissionController {
 		return claimSubmissionService.submitClaim(claimTable);
 	}
 	
+	@PostMapping("/api/claim/upload/{cId}")
+	public ClaimTable uploadImage(@PathVariable int cId,@RequestParam MultipartFile file) throws IOException
+	{
+		return claimSubmissionService.uploadImage(cId,file);
+	}
 	
 }
