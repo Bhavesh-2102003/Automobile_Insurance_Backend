@@ -15,7 +15,7 @@ import jakarta.persistence.OneToOne;
 public class ClaimTable {
 	  @Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private Integer id;
+	    private int id;
 
 	    @Column(nullable = false)
 	    private String claimType;
@@ -34,7 +34,7 @@ public class ClaimTable {
 	    @Column(nullable = false)
 	    private LocalDateTime submittedAt=LocalDateTime.now();
 	    
-	    @Column(nullable=false)
+	    
 	    private String imageUrl;
 	    
 	    @Column(nullable=false)
@@ -114,11 +114,11 @@ public class ClaimTable {
 			this.damageDescription = damageDescription;
 		}
 
-		public LocalDateTime getAccidentDate() {
+		public LocalDate getAccidentDate() {
 			return accidentDate;
 		}
 
-		public void setAccidentDate(LocalDateTime accidentDate) {
+		public void setAccidentDate(LocalDate accidentDate) {
 			this.accidentDate = accidentDate;
 		}
 

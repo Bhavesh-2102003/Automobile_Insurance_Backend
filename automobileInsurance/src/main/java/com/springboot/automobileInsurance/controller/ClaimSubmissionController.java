@@ -3,6 +3,7 @@ package com.springboot.automobileInsurance.controller;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +20,7 @@ import com.springboot.automobileInsurance.service.PolicyDetailsService;
 import com.springboot.automobileInsurance.service.VehicleDetailsService;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173/")
 public class ClaimSubmissionController {
 	
 	@Autowired
@@ -34,7 +36,7 @@ public class ClaimSubmissionController {
 	PolicyDetailsService policyDetailsService;
 	
 	@PostMapping("/api/claim/submit")
-	public ClaimTable submitClaim(@RequestBody ClaimTable claimTable,@RequestParam MultipartFile file) throws IOException
+	public ClaimTable submitClaim(@RequestBody ClaimTable claimTable) throws IOException
 	{
 		Customer customer=customerService.findById(claimTable.getCustomer().getId());
 		VehicleDetails vehicleDetails=vehicleDetailsService.findById(claimTable.getVehicleDetails().getId());
@@ -44,7 +46,7 @@ public class ClaimSubmissionController {
 		claimTable.setCustomer(customer);
 		claimTable.setVehicleDetails(vehicleDetails);
 		
-		return claimSubmissionService.submitClaim(claimTable,file);
+		return claimSubmissionService.submitClaim(claimTable);
 	}
 	
 	
