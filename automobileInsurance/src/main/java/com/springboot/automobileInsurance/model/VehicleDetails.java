@@ -16,22 +16,18 @@ import jakarta.persistence.ManyToOne;
 public class VehicleDetails {
 	 @Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private Integer id;
+	    private int id;
 
 	    @Column(nullable = false)
 	    private String vehicleType; // "Car" or "Bike"
+	    
 
 	    @Column(nullable = false)
 	    private String RegistrationNumber;
 
 	    @Column(nullable = false)
 	    private String FuelType;
-
-	    @Column(nullable = false)
-	    private LocalDateTime PolicyExpiryDate;
-
-	    @Column(nullable = false)
-	    private String MedicalInsuranceValid;
+	    
 
 	    @Column(nullable = false)
 	    private String CommercialCar;
@@ -46,43 +42,36 @@ public class VehicleDetails {
 	    private String PreviousInsurancePolicyNo;
 
 	    @Column(nullable = false)
-	    private String PreviousInsurerValidTill;
-
-	    @Column(nullable = false)
 	    private String Pincode;
 
-	    @Column(nullable = false)
-	    private String contact;
-
-	    public String getContact() {
-			return contact;
-		}
-
-		public void setContact(String contact) {
-			this.contact = contact;
-		}
-
-		@Column(nullable = false)
-	    private String Mail;
-
-	    @Column(nullable=false)
 	    @JsonProperty("gstNumber")
 	    private String GSTNumber;
 
-	    @Column(nullable = false)
-	    private String RegistrationCertificateValidUpto;
 
 	    @Column(nullable = false)
 	    private String DrivingLicenseNo;
 
 	    // Specific to Bike
 	    private String BikeModel;
+	    
+	    private int kilometersDriven;
 
+	    
 	    // Specific to Car
 	    private String CarVariant;
-
-	    @ManyToOne(optional=true)
+	    
+	    @ManyToOne
 	    private Customer customer;
+	    
+	    public int getKilometersDriven() {
+			return kilometersDriven;
+		}
+
+		public void setKilometersDriven(int kilometersDriven) {
+			this.kilometersDriven = kilometersDriven;
+		}
+
+	    
 
 		public Integer getId() {
 			return id;
@@ -116,21 +105,8 @@ public class VehicleDetails {
 			FuelType = fuelType;
 		}
 
-		public LocalDateTime getPolicyExpiryDate() {
-			return PolicyExpiryDate;
-		}
-
-		public void setPolicyExpiryDate(LocalDateTime policyExpiryDate) {
-			PolicyExpiryDate = policyExpiryDate;
-		}
-
-		public String getMedicalInsuranceValid() {
-			return MedicalInsuranceValid;
-		}
-
-		public void setMedicalInsuranceValid(String medicalInsuranceValid) {
-			MedicalInsuranceValid = medicalInsuranceValid;
-		}
+		
+		
 
 		public String getCommercialCar() {
 			return CommercialCar;
@@ -164,13 +140,7 @@ public class VehicleDetails {
 			PreviousInsurancePolicyNo = previousInsurancePolicyNo;
 		}
 
-		public String getPreviousInsurerValidTill() {
-			return PreviousInsurerValidTill;
-		}
-
-		public void setPreviousInsurerValidTill(String previousInsurerValidTill) {
-			PreviousInsurerValidTill = previousInsurerValidTill;
-		}
+		
 
 		public String getPincode() {
 			return Pincode;
@@ -183,13 +153,6 @@ public class VehicleDetails {
 		
 		
 
-		public String getMail() {
-			return Mail;
-		}
-
-		public void setMail(String mail) {
-			Mail = mail;
-		}
 
 		public String getGSTNumber() {
 			return GSTNumber;
@@ -199,13 +162,6 @@ public class VehicleDetails {
 			GSTNumber = gSTNumber;
 		}
 
-		public String getRegistrationCertificateValidUpto() {
-			return RegistrationCertificateValidUpto;
-		}
-
-		public void setRegistrationCertificateValidUpto(String registrationCertificateValidUpto) {
-			RegistrationCertificateValidUpto = registrationCertificateValidUpto;
-		}
 
 		public String getDrivingLicenseNo() {
 			return DrivingLicenseNo;
@@ -237,6 +193,10 @@ public class VehicleDetails {
 
 		public void setCustomer(Customer customer) {
 			this.customer = customer;
+		}
+
+		public void setId(int id) {
+			this.id = id;
 		}
 	    
 	    

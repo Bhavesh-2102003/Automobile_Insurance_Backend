@@ -6,4 +6,8 @@ import com.springboot.automobileInsurance.model.Officer;
 
 public interface OfficerRepository extends JpaRepository<Officer, Integer> {
 
+	Officer findByUserUsername(String username);
+
+	
+
 }

@@ -1,70 +1,57 @@
 package com.springboot.automobileInsurance.model;
-
 import java.time.LocalDate;
-
-import com.springboot.automobileInsurance.enums.PolicyStatus;
-import com.springboot.automobileInsurance.enums.PolicyType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class PolicyDetails {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;  // findById
-	
-	@Column(nullable = false)
-	private String name;  // findByName
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(nullable = false)
+    private LocalDate startDate=LocalDate.now();
+
+    @Column(nullable = false)
+    private LocalDate endDate;
+
+    @Column(nullable = false)
+    private Double coverageAmount;  
 
 	@Column(nullable = false)
-	private LocalDate startDate;
+    private String coverageType;
 
-	@Column(nullable = false)
-	private LocalDate endDate;
-	
-	@Enumerated(EnumType.STRING)
-	private PolicyType policyType; //findByPolicyType
+    @Column(nullable = false)
+    private String status="Active";
 
-	@Column(nullable = false)
-	private Double coverageAmount;
 
-	@Column(nullable = false)
-	private String createdAt;
-	
-	@Enumerated(EnumType.STRING)
-	private PolicyStatus policyStatus; //findByPolicyStatus
+    @ManyToOne
+    private Customer customer;
+    
+    @OneToOne
+    private VehicleDetails vehicleDetails;
+    
+    public VehicleDetails getVehicleDetails() {
+		return vehicleDetails;
+	}
 
-	@ManyToOne // List<Customer>
-	private Customer customer;
-
-	@ManyToOne // List<VehicleDetails>
-	private VehicleDetails vehicleDetails;
-	
-	@ManyToOne // List<Officer>
-	private Officer officer;
-
-	public int getId() {
+	public void setVehicleDetails(VehicleDetails vehicleDetails) {
+		this.vehicleDetails = vehicleDetails;
+	}
+    
+    public int getId() {
 		return id;
 	}
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public LocalDate getStartDate() {
@@ -83,14 +70,6 @@ public class PolicyDetails {
 		this.endDate = endDate;
 	}
 
-	public PolicyType getPolicyType() {
-		return policyType;
-	}
-
-	public void setPolicyType(PolicyType policyType) {
-		this.policyType = policyType;
-	}
-
 	public Double getCoverageAmount() {
 		return coverageAmount;
 	}
@@ -99,21 +78,22 @@ public class PolicyDetails {
 		this.coverageAmount = coverageAmount;
 	}
 
-	public String getCreatedAt() {
-		return createdAt;
+	public String getCoverageType() {
+		return coverageType;
 	}
 
-	public void setCreatedAt(String createdAt) {
-		this.createdAt = createdAt;
+	public void setCoverageType(String coverageType) {
+		this.coverageType = coverageType;
 	}
 
-	public PolicyStatus getPolicyStatus() {
-		return policyStatus;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setPolicyStatus(PolicyStatus policyStatus) {
-		this.policyStatus = policyStatus;
+	public void setStatus(String status) {
+		this.status = status;
 	}
+
 
 	public Customer getCustomer() {
 		return customer;
@@ -123,22 +103,4 @@ public class PolicyDetails {
 		this.customer = customer;
 	}
 
-	public VehicleDetails getVehicleDetails() {
-		return vehicleDetails;
-	}
-
-	public void setVehicleDetails(VehicleDetails vehicleDetails) {
-		this.vehicleDetails = vehicleDetails;
-	}
-
-	public Officer getOfficer() {
-		return officer;
-	}
-
-	public void setOfficer(Officer officer) {
-		this.officer = officer;
-	}
-	
-	
-
-	}
+}

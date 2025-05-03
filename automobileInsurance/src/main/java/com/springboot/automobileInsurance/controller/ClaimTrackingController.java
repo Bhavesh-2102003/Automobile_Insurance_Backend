@@ -3,6 +3,7 @@ package com.springboot.automobileInsurance.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,6 +13,7 @@ import com.springboot.automobileInsurance.model.ClaimTracking;
 import com.springboot.automobileInsurance.service.ClaimTrackingService;
 
 @RestController
+@CrossOrigin({"http://localhost:5173"})
 public class ClaimTrackingController {
 	
 	@Autowired

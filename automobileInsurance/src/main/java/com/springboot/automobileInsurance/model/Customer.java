@@ -2,6 +2,8 @@ package com.springboot.automobileInsurance.model;
 
 import java.time.LocalDate;
 
+import org.hibernate.annotations.CurrentTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -49,7 +51,8 @@ public class Customer {
 	public void setContact(String contact) {
 		this.contact = contact;
 	}
-
+	
+	@CurrentTimestamp
 	private LocalDate createdAt;	
 
     @Column(length = 20)

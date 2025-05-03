@@ -35,9 +35,7 @@ public class Payment {
     private ClaimTable claimTable;
 
   
-    @OneToOne
-    private PolicyRenewalRequest policyRenewalRequest;
-
+    
 	public int getId() {
 		return id;
 	}
@@ -111,14 +109,7 @@ public class Payment {
 	}
 
 
-	public PolicyRenewalRequest getPolicyRenewalRequest() {
-		return policyRenewalRequest;
-	}
-
-	public void setPolicyRenewalRequest(PolicyRenewalRequest policyRenewalRequest) {
-		this.policyRenewalRequest = policyRenewalRequest;
-	}
-    
+	    
     
     
     

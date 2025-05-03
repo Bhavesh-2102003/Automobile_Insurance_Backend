@@ -6,6 +6,4 @@ import com.springboot.automobileInsurance.model.VehicleDetails;
 
 public interface VehicleDetailsRepository extends JpaRepository<VehicleDetails, Integer>{
 
-	VehicleDetails findByContact(String contact);
-
 }

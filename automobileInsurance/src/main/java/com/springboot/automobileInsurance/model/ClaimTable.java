@@ -19,23 +19,18 @@ public class ClaimTable {
 	    @Column(nullable = false)
 	    private String claimType;
 
-	    @Column(nullable = false)
-	    private String reason;
 
-	    @Column(nullable = false)
+	    public String getImageUrl() {
+			return imageUrl;
+		}
+
+		public void setImageUrl(String imageUrl) {
+			this.imageUrl = imageUrl;
+		}
+
+		@Column(nullable = false)
 	    private String location;
 
-	    @Column(nullable = false)
-	    private String policeReportNumber;
-
-	    @Column(nullable = false)
-	    private String garageDetails;
-
-	    @Column(nullable = false)
-	    private String driverName;
-
-	    @Column(nullable = false)
-	    private String driverLicense;
 
 	    @Column(nullable = false)
 	    private String damageDescription;
@@ -46,7 +41,8 @@ public class ClaimTable {
 	    @Column(nullable = false)
 	    private LocalDateTime submittedAt;
 	    
-	   
+	    @Column(nullable=false)
+	    private String imageUrl;
 
 	    @ManyToOne
 	    private Customer customer;
@@ -70,13 +66,7 @@ public class ClaimTable {
 			this.claimType = claimType;
 		}
 
-		public String getReason() {
-			return reason;
-		}
-
-		public void setReason(String reason) {
-			this.reason = reason;
-		}
+	
 
 		public String getLocation() {
 			return location;
@@ -86,37 +76,8 @@ public class ClaimTable {
 			this.location = location;
 		}
 
-		public String getPoliceReportNumber() {
-			return policeReportNumber;
-		}
+		
 
-		public void setPoliceReportNumber(String policeReportNumber) {
-			this.policeReportNumber = policeReportNumber;
-		}
-
-		public String getGarageDetails() {
-			return garageDetails;
-		}
-
-		public void setGarageDetails(String garageDetails) {
-			this.garageDetails = garageDetails;
-		}
-
-		public String getDriverName() {
-			return driverName;
-		}
-
-		public void setDriverName(String driverName) {
-			this.driverName = driverName;
-		}
-
-		public String getDriverLicense() {
-			return driverLicense;
-		}
-
-		public void setDriverLicense(String driverLicense) {
-			this.driverLicense = driverLicense;
-		}
 
 		public String getDamageDescription() {
 			return damageDescription;
@@ -157,6 +118,5 @@ public class ClaimTable {
 		public void setVehicleDetails(VehicleDetails vehicleDetails) {
 			this.vehicleDetails = vehicleDetails;
 		}
-	    
-	    
+	        
 }

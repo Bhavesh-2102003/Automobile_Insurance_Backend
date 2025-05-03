@@ -21,10 +21,6 @@ public class VehicleDetailsService {
 		return vehicleDetailsRepository.save(vehicleDetails);
 	}
 	
-	public VehicleDetails findByContact(String contact)
-	{
-		return vehicleDetailsRepository.findByContact(contact);
-	}
 
 	public VehicleDetails findById(int vId) {
 		
@@ -34,6 +30,12 @@ public class VehicleDetailsService {
 			throw new InvalidIDException("Vehicle ID is invalid");
 		}
 		
+		return optional.get();
+	}
+
+
+	public VehicleDetails getVehicleById(int id) {
+		Optional<VehicleDetails> optional = vehicleDetailsRepository.findById(id);
 		return optional.get();
 	}
 
