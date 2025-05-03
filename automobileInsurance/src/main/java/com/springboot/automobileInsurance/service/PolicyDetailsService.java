@@ -13,10 +13,10 @@ import com.springboot.automobileInsurance.repository.PolicyDetailsRepository;
 public class PolicyDetailsService {
 
 	@Autowired
-	PolicyDetailsRepository policyDetailsRepository;
+	private PolicyDetailsRepository policyDetailsRepository;
 
 	@Autowired
-	CustomerRepository customerRepository;
+	private CustomerRepository customerRepository;
 
 	public List<PolicyDetails> findByCustomerId(int cId) {
 
@@ -27,6 +27,11 @@ public class PolicyDetailsService {
 
 		return policyDetailsRepository.save(policyDetails);
 	}
+	
+	public PolicyDetails findByVehicleId(int vId) {
+			
+			return policyDetailsRepository.findByVehicleDetailsId(vId);
+		}
 
 	public List<PolicyDetails> getAll() {
 

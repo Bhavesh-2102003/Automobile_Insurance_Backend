@@ -10,4 +10,6 @@ public interface PolicyDetailsRepository extends JpaRepository<PolicyDetails, In
 
 	List<PolicyDetails> findByCustomerId(int cId);
 
+	PolicyDetails findByVehicleDetailsId(int vId);
+
 }

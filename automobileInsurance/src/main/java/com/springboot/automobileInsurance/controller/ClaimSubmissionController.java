@@ -1,42 +1,74 @@
 package com.springboot.automobileInsurance.controller;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.springboot.automobileInsurance.model.ClaimTable;
 import com.springboot.automobileInsurance.model.Customer;
+import com.springboot.automobileInsurance.model.PolicyDetails;
 import com.springboot.automobileInsurance.model.VehicleDetails;
 import com.springboot.automobileInsurance.service.ClaimSubmissionService;
 import com.springboot.automobileInsurance.service.CustomerService;
+import com.springboot.automobileInsurance.service.PolicyDetailsService;
 import com.springboot.automobileInsurance.service.VehicleDetailsService;
 
 @RestController
-@CrossOrigin({"http://localhost:5173"})
+@CrossOrigin(origins = "http://localhost:5173/")
 public class ClaimSubmissionController {
 	
 	@Autowired
-	ClaimSubmissionService claimSubmissionService;
+	private ClaimSubmissionService claimSubmissionService;
 	
 	@Autowired
-	CustomerService customerService;
+	private CustomerService customerService;
 	
 	@Autowired
-	VehicleDetailsService vehicleDetailsService;
+	private VehicleDetailsService vehicleDetailsService;
 	
-//	@PostMapping("/api/claim/submit/{contact}")
-//	public ClaimTable submitClaim(@RequestBody ClaimTable claimTable,
-//									@PathVariable String contact)
-//	{
-//		Customer customer=customerService.findByContact(contact);
-//		VehicleDetails vehicleDetails=vehicleDetailsService.findByContact(contact);
-//		
-//		claimTable.setCustomer(customer);
-//		claimTable.setVehicleDetails(vehicleDetails);
-//		
-//		return claimSubmissionService.submitClaim(claimTable);
-//	}
+	@Autowired
+	private PolicyDetailsService policyDetailsService;
+	
+	@PostMapping("/api/claim/submit")
+	public ClaimTable submitClaim(@RequestBody ClaimTable claimTable) throws IOException
+	{
+		Customer customer=customerService.findById(claimTable.getCustomer().getId());
+		VehicleDetails vehicleDetails=vehicleDetailsService.findById(claimTable.getVehicleDetails().getId());
+		PolicyDetails policyDetails =policyDetailsService.findByVehicleId(vehicleDetails.getId());
+		
+		claimTable.setPolicyDetails(policyDetails);
+		claimTable.setCustomer(customer);
+		claimTable.setVehicleDetails(vehicleDetails);
+		
+		return claimSubmissionService.submitClaim(claimTable);
+	}
+	
+	@PostMapping("/api/claim/upload/{cId}")
+	public ClaimTable uploadImage(@PathVariable int cId,@RequestParam MultipartFile file) throws IOException
+	{
+		return claimSubmissionService.uploadImage(cId,file);
+	}
+	
+	@GetMapping("/api/claim/getAll/{cId}")
+	public List<ClaimTable> getAllClaims(@PathVariable int cId)
+	{
+		return claimSubmissionService.getAllClaims(cId);
+	}
+	
+	/*get all the claim to view the ui*/
+	
+	@GetMapping("/api/claim/all")
+		public List<ClaimTable> getListOfClaim(){
+		return claimSubmissionService.getListOfClaim();
+	}
+	
 }

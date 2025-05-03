@@ -1,5 +1,6 @@
 package com.springboot.automobileInsurance.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -14,47 +15,50 @@ import jakarta.persistence.OneToOne;
 public class ClaimTable {
 	  @Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private Integer id;
+	    private int id;
 
 	    @Column(nullable = false)
 	    private String claimType;
 
 
-	    public String getImageUrl() {
-			return imageUrl;
-		}
-
-		public void setImageUrl(String imageUrl) {
-			this.imageUrl = imageUrl;
-		}
-
-		@Column(nullable = false)
+	    @Column(nullable = false)
 	    private String location;
-
-
+	    
+	    
 	    @Column(nullable = false)
 	    private String damageDescription;
-
+	    
 	    @Column(nullable = false)
-	    private LocalDateTime accidentDate;
-
+	    private LocalDate accidentDate;
+	    
 	    @Column(nullable = false)
-	    private LocalDateTime submittedAt;
+	    private LocalDateTime submittedAt=LocalDateTime.now();
+	    
+	    
+	    private String imageUrl;
 	    
 	    @Column(nullable=false)
-	    private String imageUrl;
+	    private String status;
+	    
+	    private String feedback;
+	    
+	    private double approvedAmount;
+	    
+	    @OneToOne
+	    PolicyDetails policyDetails;
+	    
 
-	    @ManyToOne
+		@ManyToOne
 	    private Customer customer;
-
+	    
 	    @OneToOne
 	    private VehicleDetails vehicleDetails;
 
-		public Integer getId() {
+		public int getId() {
 			return id;
 		}
 
-		public void setId(Integer id) {
+		public void setId(int id) {
 			this.id = id;
 		}
 
@@ -66,8 +70,6 @@ public class ClaimTable {
 			this.claimType = claimType;
 		}
 
-	
-
 		public String getLocation() {
 			return location;
 		}
@@ -75,9 +77,6 @@ public class ClaimTable {
 		public void setLocation(String location) {
 			this.location = location;
 		}
-
-		
-
 
 		public String getDamageDescription() {
 			return damageDescription;
@@ -87,11 +86,11 @@ public class ClaimTable {
 			this.damageDescription = damageDescription;
 		}
 
-		public LocalDateTime getAccidentDate() {
+		public LocalDate getAccidentDate() {
 			return accidentDate;
 		}
 
-		public void setAccidentDate(LocalDateTime accidentDate) {
+		public void setAccidentDate(LocalDate accidentDate) {
 			this.accidentDate = accidentDate;
 		}
 
@@ -101,6 +100,46 @@ public class ClaimTable {
 
 		public void setSubmittedAt(LocalDateTime submittedAt) {
 			this.submittedAt = submittedAt;
+		}
+
+		public String getImageUrl() {
+			return imageUrl;
+		}
+
+		public void setImageUrl(String imageUrl) {
+			this.imageUrl = imageUrl;
+		}
+
+		public String getStatus() {
+			return status;
+		}
+
+		public void setStatus(String status) {
+			this.status = status;
+		}
+
+		public String getFeedback() {
+			return feedback;
+		}
+
+		public void setFeedback(String feedback) {
+			this.feedback = feedback;
+		}
+
+		public double getApprovedAmount() {
+			return approvedAmount;
+		}
+
+		public void setApprovedAmount(double approvedAmount) {
+			this.approvedAmount = approvedAmount;
+		}
+
+		public PolicyDetails getPolicyDetails() {
+			return policyDetails;
+		}
+
+		public void setPolicyDetails(PolicyDetails policyDetails) {
+			this.policyDetails = policyDetails;
 		}
 
 		public Customer getCustomer() {
@@ -118,5 +157,6 @@ public class ClaimTable {
 		public void setVehicleDetails(VehicleDetails vehicleDetails) {
 			this.vehicleDetails = vehicleDetails;
 		}
-	        
+	    
+	   
 }
