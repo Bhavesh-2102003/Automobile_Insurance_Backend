@@ -40,7 +40,31 @@ public class ClaimTable {
 	    @Column(nullable=false)
 	    private String status;
 	    
-	    @OneToOne
+	    private String feedback;
+	    
+	    private double approvedAmount;
+	    
+	    public String getFeedback() {
+			return feedback;
+		}
+
+		public void setFeedback(String feedback) {
+			this.feedback = feedback;
+		}
+
+		public double getApprovedAmount() {
+			return approvedAmount;
+		}
+
+		public void setApprovedAmount(double approvedAmount) {
+			this.approvedAmount = approvedAmount;
+		}
+
+		public void setId(int id) {
+			this.id = id;
+		}
+
+		@OneToOne
 	    PolicyDetails policyDetails;
 	    
 

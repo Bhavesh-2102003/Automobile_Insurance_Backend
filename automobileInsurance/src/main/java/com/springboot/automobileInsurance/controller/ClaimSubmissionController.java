@@ -1,9 +1,11 @@
 package com.springboot.automobileInsurance.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,6 +56,12 @@ public class ClaimSubmissionController {
 	public ClaimTable uploadImage(@PathVariable int cId,@RequestParam MultipartFile file) throws IOException
 	{
 		return claimSubmissionService.uploadImage(cId,file);
+	}
+	
+	@GetMapping("/api/claim/getAll/{cId}")
+	public List<ClaimTable> getAllClaims(@PathVariable int cId)
+	{
+		return claimSubmissionService.getAllClaims(cId);
 	}
 	
 }
