@@ -23,7 +23,9 @@ import com.springboot.automobileInsurance.service.MyUserService;
 @RestController
 @CrossOrigin({"http://localhost:5173"})
 public class AuthController {
-
+	
+	
+	 
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	@Autowired
@@ -32,6 +34,9 @@ public class AuthController {
 	private MyUserService myUserService;
 	@Autowired
 	private JwtUtil jwtUtil;
+	
+	
+	
 	
 	@PostMapping("/api/auth/signup")
 	public User signUp(@RequestBody User user) throws InvalidUsernameException {
