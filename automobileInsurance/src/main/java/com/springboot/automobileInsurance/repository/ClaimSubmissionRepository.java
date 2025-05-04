@@ -10,4 +10,7 @@ public interface ClaimSubmissionRepository extends JpaRepository<ClaimTable, Int
 
 	List<ClaimTable> findByCustomerId(int cId);
 
+
+	int countByStatus(String status);
+
 }
