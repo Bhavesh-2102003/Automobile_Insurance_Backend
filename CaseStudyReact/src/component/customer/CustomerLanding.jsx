@@ -8,9 +8,11 @@ import CustomerReasonsSection from "./CustomerReasonsSection";
 import InsuranceServices from "./CustomerServicesSection";
 import TestimonialsSection from "./CustomerTestimonialSection";
 import Footer from "./CustomerFooterSection";
+import { useSelector } from "react-redux";
 
 function CustomerLanding()
 {
+    
     return(
         <>
         <Header />

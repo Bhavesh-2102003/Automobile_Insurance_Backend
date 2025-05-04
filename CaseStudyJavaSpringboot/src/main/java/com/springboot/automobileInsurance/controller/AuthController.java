@@ -2,6 +2,8 @@ package com.springboot.automobileInsurance.controller;
 
 import java.security.Principal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.automobileInsurance.config.JwtUtil;
@@ -34,9 +35,12 @@ public class AuthController {
 	@Autowired
 	private JwtUtil jwtUtil;
 	
+	Logger logger=LoggerFactory.getLogger("AuthController");
+	
 	@PostMapping("/api/auth/signup")
 	public User signUp(@RequestBody User user) throws InvalidUsernameException {
 		
+		logger.info("Sign Up in progress for User "+user.getUsername());
 		return authService.signUp(user);
 	}
 	
@@ -72,6 +76,8 @@ public class AuthController {
 		dto.setToken(token);
 		dto.setUsername(user.getUsername());
 		dto.setExpiry(jwtUtil.extractExpiration(token).toString());
+		logger.info("Token has been generated for User "+user.getUsername());
+		logger.warn("Token will expire on "+jwtUtil.extractExpiration(token).toString());
 		return dto; 
 	}
 	

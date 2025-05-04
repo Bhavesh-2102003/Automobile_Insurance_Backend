@@ -1,6 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
+import { setCredentials } from "../../store/userSlice";
+import { useDispatch } from "react-redux";
+
 
 function Login()
 {
@@ -18,49 +21,56 @@ function Login()
       }
   }, [userId]);
 
-  const customerLogin = async (event) => {
-    event.preventDefault();
+  const dispatch = useDispatch();
 
-    let body = {
-        "username": username,
-        "password": password
-    };
+const customerLogin = async (event) => {
+  event.preventDefault();
 
-    try {
-        let response = await axios.post("http://localhost:8087/api/auth/token/generate", body);
-        let token = response.data.token;
-        localStorage.setItem('token', token);
-        localStorage.setItem('username', username);
+  let body = {
+    username,
+    password
+  };
 
-        let resp = await axios.get('http://localhost:8087/api/auth/user/details', {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        });
+  try {
+    let response = await axios.post("http://localhost:8087/api/auth/token/generate", body);
+    let token = response.data.token;
 
-        const role = resp.data.role;
-        const userIdFromBackend = resp.data.id;
-        setUserId(userIdFromBackend); 
-        
-        let customerResponse = await axios.get(`http://localhost:8087/api/customer/getByUserId/${userIdFromBackend}`);
-        const customerId = customerResponse.data.id;
-        localStorage.setItem("customerId", customerId);
+    // Save in Redux store
+    dispatch(setCredentials({ username, token }));
 
-        switch (role) {
-            case 'USER_DEFAULT':
-                navigate("/customer");
-                break;
-            case 'VENDOR':
-                navigate("/vendor");
-                break;
-            case 'ADMIN':
-                break;
-            default:
-                break;
-        }
-    } catch (error) {
-        console.error("Login error:", error);
+    // Optionally save in localStorage
+    localStorage.setItem('token', token);
+    localStorage.setItem('username', username);
+
+    let resp = await axios.get('http://localhost:8087/api/auth/user/details', {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    const role = resp.data.role;
+    const userIdFromBackend = resp.data.id;
+    setUserId(userIdFromBackend); 
+    
+    let customerResponse = await axios.get(`http://localhost:8087/api/customer/getByUserId/${userIdFromBackend}`);
+    const customerId = customerResponse.data.id;
+    localStorage.setItem("customerId", customerId);
+
+    switch (role) {
+      case 'USER_DEFAULT':
+        navigate("/customer");
+        break;
+      case 'VENDOR':
+        navigate("/vendor");
+        break;
+      case 'ADMIN':
+        break;
+      default:
+        break;
     }
+  } catch (error) {
+    console.error("Login error:", error);
+  }
 };
 
   

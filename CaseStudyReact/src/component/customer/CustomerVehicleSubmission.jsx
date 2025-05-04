@@ -2,8 +2,12 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import Header from "./Header";
+import { useSelector } from "react-redux";
+
 
 function VehicleSubmission() {
+  const token = useSelector((state) => state.user.token);
+  {console.log(token)}
   const [vehicleType, setVehicleType] = useState(null);
   const [registrationNumber, setRegistrationNumber] = useState(null);
   const [fuelType, setFuelType] = useState(null);

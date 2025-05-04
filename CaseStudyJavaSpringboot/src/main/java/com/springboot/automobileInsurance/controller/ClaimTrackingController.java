@@ -18,7 +18,7 @@ public class ClaimTrackingController {
 	
 	@GetMapping("/api/claim/tracking/{cId}")
 	public List<ClaimTracking> getClaimTracking(@PathVariable int cId)
-	{
+	{//This method has not been used as claim tracking has been integrated into claimtable itself
 		return claimTrackingService.getClaimTracking(cId);
 	}
 }

@@ -38,9 +38,14 @@ public class ClaimSubmissionController {
 	@Autowired
 	PolicyDetailsService policyDetailsService;
 	
+	
+	//Here the claim is submitted through no ID's as the ID's have been explicitly defined in the claimTable and again each entity is updated from the DB
 	@PostMapping("/api/claim/submit")
 	public ClaimTable submitClaim(@RequestBody ClaimTable claimTable) throws IOException
 	{
+		//Another important thing here is there are two separate API's for claim upload 
+		//->Step 1: Upload details without image URL
+		//->Step 2 :Image will be uploaded only when the customer uploads his claimDetails first because i cannot integrate requestbody into formData
 		Customer customer=customerService.findById(claimTable.getCustomer().getId());
 		VehicleDetails vehicleDetails=vehicleDetailsService.findById(claimTable.getVehicleDetails().getId());
 		PolicyDetails policyDetails =policyDetailsService.findByVehicleId(vehicleDetails.getId());
@@ -55,12 +60,15 @@ public class ClaimSubmissionController {
 	@PostMapping("/api/claim/upload/{cId}")
 	public ClaimTable uploadImage(@PathVariable int cId,@RequestParam MultipartFile file) throws IOException
 	{
+		//Image is uploaded to claimtable/imageURL based on customer ID in the path react/path/images
 		return claimSubmissionService.uploadImage(cId,file);
 	}
 	
 	@GetMapping("/api/claim/getAll/{cId}")
 	public List<ClaimTable> getAllClaims(@PathVariable int cId)
 	{
+		//Get All mapping for getting claims by a particular customer in order to display in Tracking section
+		//The customer ID over here has been derived from localStorage
 		return claimSubmissionService.getAllClaims(cId);
 	}
 	
