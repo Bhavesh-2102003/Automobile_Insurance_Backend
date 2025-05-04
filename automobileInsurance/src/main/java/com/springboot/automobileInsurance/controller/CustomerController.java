@@ -37,5 +37,11 @@ public class CustomerController {
 		return customerService.findByUserId(uId);
 				
 	}
+	
+	@GetMapping("/api/customer/getByCustomerId/{cId}")
+	public Customer getByCustomerId(@PathVariable int cId)
+	{
+		return customerService.getByCustomerId(cId);
+	}
 
 }
