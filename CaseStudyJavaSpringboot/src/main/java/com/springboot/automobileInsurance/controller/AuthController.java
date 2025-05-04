@@ -35,6 +35,9 @@ public class AuthController {
 	@Autowired
 	private JwtUtil jwtUtil;
 	
+	//Define a logger class from slf4j and the class you want to log
+	//logger.info,logger.warn are some methods
+	
 	Logger logger=LoggerFactory.getLogger("AuthController");
 	
 	@PostMapping("/api/auth/signup")
