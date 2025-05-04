@@ -78,12 +78,12 @@ public class ClaimSubmissionController {
 	    return claimSubmissionService.updateClaim(id, claimUpdateDTO); 
 	}
 	//to get the count by the status of approval and rejected 
-	@GetMapping("/api/status/count")
-	public Map<String, Integer> getClaimCounts() {
-	    Map<String, Integer> counts = new HashMap<>();
-	    counts.put("approved", claimSubmissionService.countApprovedClaims());
-	    counts.put("rejected", claimSubmissionService.countRejectedClaims());
-	    return counts;
-	}
-	
+		@GetMapping("/api/status/count")
+		public Map<String, Integer> getClaimCounts() {
+		    Map<String, Integer> counts = new HashMap<>();
+		    counts.put("approved", claimSubmissionService.countApprovedClaims());
+		    counts.put("rejected", claimSubmissionService.countRejectedClaims());
+		    return counts;
+		}
+		
 }
