@@ -9,11 +9,12 @@ function PolicyList() {
     const navigate=useNavigate();
     const [claims,setClaims]=useState([]);
     const customerId=localStorage.getItem('customerId');
+    const token=localStorage.getItem('token');
+
     
 
     useEffect(()=>{
         const fetchAllPolicies=async()=>{
-            const token=localStorage.getItem('token');
     let response=await axios.get('http://localhost:8087/api/auth/user/details',
         {
             headers: {
@@ -22,15 +23,30 @@ function PolicyList() {
         }
     )
     const userId = response.data.id;
-    let customerReponse=await axios.get(`http://localhost:8087/api/customer/getByUserId/${userId}`);
+    let customerReponse=await axios.get(`http://localhost:8087/api/customer/getByUserId/${userId}`,
+      {
+          headers: {
+              "Authorization": `Bearer ${token}`  
+          }
+      });
     const customerId=customerReponse.data.id;
 
-    let policyResponse=await axios.get(`http://localhost:8087/api/policy/getAll/${customerId}`);
+    let policyResponse=await axios.get(`http://localhost:8087/api/policy/getAll/${customerId}`,
+      {
+          headers: {
+              "Authorization": `Bearer ${token}`  
+          }
+      });
     setPolicies(policyResponse.data);}
     fetchAllPolicies();
 
     const getAllClaims=async()=>{
-      let response=await axios.get(`http://localhost:8087/api/claim/getAll/${customerId}`);
+      let response=await axios.get(`http://localhost:8087/api/claim/getAll/${customerId}`,
+        {
+            headers: {
+                "Authorization": `Bearer ${token}`  
+            }
+        });
       setClaims(response.data);
       
   }

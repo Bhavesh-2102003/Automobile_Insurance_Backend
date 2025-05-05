@@ -42,6 +42,7 @@ const ClaimSubmissionForm = () => {
         alert('No Image Selected');
         return;
       }
+      
     formData.append('file',damageImage);
     let token=localStorage.getItem('token');
 

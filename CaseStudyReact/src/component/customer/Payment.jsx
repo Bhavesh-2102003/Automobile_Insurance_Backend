@@ -32,7 +32,12 @@ function Payment() {
         const userId = response.data.id;
         
     
-        let customerReponse=await axios.get(`http://localhost:8087/api/customer/getByUserId/${userId}`);
+        let customerReponse=await axios.get(`http://localhost:8087/api/customer/getByUserId/${userId}`,
+          {
+              headers: {
+                  "Authorization": `Bearer ${token}`  
+              }
+          });
         const customerId=customerReponse.data.id;
         
         setCustomerName(customerReponse.data.firstName+" "+customerReponse.data.lastName);
@@ -48,7 +53,7 @@ function Payment() {
     
         let policy={
             "endDate":endDate,
-            "coverageAmount":pricing*10,
+            "coverageAmount":pricing,
             "coverageType":type,
             "customer":{
                 "id":customerId

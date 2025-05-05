@@ -1,5 +1,7 @@
 package com.springboot.automobileInsurance.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,11 +24,15 @@ public class VehicleDetailsController {
 	@Autowired
 	CustomerService customerService;
 	
+	Logger logger=LoggerFactory.getLogger("VehicleDetailsController");
+
+	
 	@PostMapping("/api/vehicle/add")
 	public VehicleDetails addVehicleDetails(@RequestBody VehicleDetails vehicleDetails)
 	{
 		Customer customer=customerService.findById(vehicleDetails.getCustomer().getId());
 		vehicleDetails.setCustomer(customer);
+		logger.info("A new vehicle has been added by customer "+vehicleDetails.getCustomer().getFirstName());
 		return vehicleDetailsService.addVehicleDetails(vehicleDetails);
 	}
 }

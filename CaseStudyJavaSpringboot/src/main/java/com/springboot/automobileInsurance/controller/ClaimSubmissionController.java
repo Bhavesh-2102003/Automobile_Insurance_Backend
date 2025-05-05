@@ -3,6 +3,8 @@ package com.springboot.automobileInsurance.controller;
 import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +40,8 @@ public class ClaimSubmissionController {
 	@Autowired
 	PolicyDetailsService policyDetailsService;
 	
+	Logger logger=LoggerFactory.getLogger("ClaimSubmissionController");
+	
 	
 	//Here the claim is submitted through no ID's as the ID's have been explicitly defined in the claimTable and again each entity is updated from the DB
 	@PostMapping("/api/claim/submit")
@@ -53,7 +57,7 @@ public class ClaimSubmissionController {
 		claimTable.setPolicyDetails(policyDetails);
 		claimTable.setCustomer(customer);
 		claimTable.setVehicleDetails(vehicleDetails);
-		
+		logger.info("A new Claim has been submitted by "+claimTable.getCustomer().getFirstName());
 		return claimSubmissionService.submitClaim(claimTable);
 	}
 	

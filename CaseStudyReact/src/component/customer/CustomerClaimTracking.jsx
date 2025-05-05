@@ -19,10 +19,17 @@ const ClaimTrackingPage = () => {
 
   const [claims,setClaims]=useState([]);
   const customerId=localStorage.getItem('customerId');
+  const token=localStorage.getItem('token');
 
   useEffect(()=>{
     const getAllClaims=async()=>{
-        let response=await axios.get(`http://localhost:8087/api/claim/getAll/${customerId}`);
+        let response=await axios.get(`http://localhost:8087/api/claim/getAll/${customerId}`,
+          {
+            headers:{
+              'Authorization':`Bearer ${token}`
+            }
+          }
+        );
         setClaims(response.data);
         
     }

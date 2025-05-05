@@ -14,9 +14,16 @@ function Profile() {
   useEffect(()=>{
     const getCustomer=async()=>{
         const customerId=localStorage.getItem('customerId');
+        const token=localStorage.getItem('token');
 
         
-        let response=await axios.get(`http://localhost:8087/api/customer/getByCustomerId/${customerId}`)
+        let response=await axios.get(`http://localhost:8087/api/customer/getByCustomerId/${customerId}`,
+          {
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          }
+        )
         setCustomer(response.data)
     }
 

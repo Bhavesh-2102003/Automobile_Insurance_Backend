@@ -27,7 +27,12 @@ function Header() {
         }
     )
     const userId = response.data.id;
-    let customerReponse=await axios.get(`http://localhost:8087/api/customer/getByUserId/${userId}`);
+    let customerReponse=await axios.get(`http://localhost:8087/api/customer/getByUserId/${userId}`,
+      {
+          headers: {
+              "Authorization": `Bearer ${token}`  
+          }
+      } );
     const customerId=customerReponse.data.id;
   setCustomerName(
   customerReponse.data.firstName + 

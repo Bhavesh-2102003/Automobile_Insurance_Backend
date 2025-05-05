@@ -52,7 +52,11 @@ const customerLogin = async (event) => {
     const userIdFromBackend = resp.data.id;
     setUserId(userIdFromBackend); 
     
-    let customerResponse = await axios.get(`http://localhost:8087/api/customer/getByUserId/${userIdFromBackend}`);
+    let customerResponse = await axios.get(`http://localhost:8087/api/customer/getByUserId/${userIdFromBackend}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
     const customerId = customerResponse.data.id;
     localStorage.setItem("customerId", customerId);
 

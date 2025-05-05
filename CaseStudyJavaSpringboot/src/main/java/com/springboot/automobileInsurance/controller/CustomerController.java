@@ -27,7 +27,6 @@ public class CustomerController {
 	@PostMapping("/api/customer/add")
 	public Customer addCustomer(@RequestBody Customer customer) throws InvalidUsernameException
 	{
-		System.out.println(customer.getUser());
 		return customerService.addCustomer(customer);
 	}
 	
