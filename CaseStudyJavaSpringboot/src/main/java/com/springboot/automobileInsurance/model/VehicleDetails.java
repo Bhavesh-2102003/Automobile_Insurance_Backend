@@ -23,7 +23,7 @@ public class VehicleDetails {
 	    
 
 	    @Column(nullable = false)
-	    private String RegistrationNumber;
+	    private String registrationNumber;
 
 	    @Column(nullable = false)
 	    private String FuelType;
@@ -90,11 +90,11 @@ public class VehicleDetails {
 		}
 
 		public String getRegistrationNumber() {
-			return RegistrationNumber;
+			return registrationNumber;
 		}
 
-		public void setRegistrationNumber(String registrationNumber) {
-			RegistrationNumber = registrationNumber;
+		public void setRegistrationNumber(String RegistrationNumber) {
+			registrationNumber = RegistrationNumber;
 		}
 
 		public String getFuelType() {

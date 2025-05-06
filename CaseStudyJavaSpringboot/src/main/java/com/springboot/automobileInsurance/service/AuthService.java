@@ -35,6 +35,16 @@ public class AuthService {
 		
 		return authRepository.save(user);
 	}
+
+	public boolean existsByUsername(String username) {
+		if(authRepository.existsByUsername(username))
+		{
+			return true;
+		}
+		
+		return false;
+		
+	}
 	
 	
 

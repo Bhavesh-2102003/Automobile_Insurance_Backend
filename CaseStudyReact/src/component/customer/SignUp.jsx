@@ -40,6 +40,20 @@ function SignUp()
             }
         }
 
+        let responseFromUser=await axios.post("http://localhost:8087/api/auth/findUser",null,
+          {
+            params:{
+              username:username
+            }
+          }
+        )
+
+        if(responseFromUser.data)
+        {
+          alert("Username already exists");
+          return;
+        }
+
         console.log(body);
             let response=await axios.post("http://localhost:8087/api/customer/add",body);
             console.log(response.data);

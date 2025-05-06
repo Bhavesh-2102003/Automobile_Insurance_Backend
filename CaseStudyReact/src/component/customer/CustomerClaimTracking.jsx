@@ -34,7 +34,7 @@ const ClaimTrackingPage = () => {
         
     }
     getAllClaims();
-  },[claims])
+  },[])
 
 
   // Status badge styling

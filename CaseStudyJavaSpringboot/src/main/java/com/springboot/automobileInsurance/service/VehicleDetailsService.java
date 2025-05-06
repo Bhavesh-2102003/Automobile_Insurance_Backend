@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.springboot.automobileInsurance.exception.InvalidIDException;
+import com.springboot.automobileInsurance.exception.VehicleAlreadyExistsException;
 import com.springboot.automobileInsurance.model.VehicleDetails;
 import com.springboot.automobileInsurance.repository.VehicleDetailsRepository;
 
@@ -18,7 +19,8 @@ public class VehicleDetailsService {
 
 	public VehicleDetails addVehicleDetails(VehicleDetails vehicleDetails) {
 		
-		return vehicleDetailsRepository.save(vehicleDetails);
+		
+	    return vehicleDetailsRepository.save(vehicleDetails);
 	}
 	
 
@@ -31,6 +33,16 @@ public class VehicleDetailsService {
 		}
 		
 		return optional.get();
+	}
+
+
+	public boolean findByRegistrationNumber(VehicleDetails vehicleDetails) {
+		if(vehicleDetailsRepository.existsByRegistrationNumber(vehicleDetails.getRegistrationNumber()))
+		{
+			return true;
+		}
+		
+		return false;
 	}
 
 	

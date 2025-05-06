@@ -65,6 +65,22 @@ function VehicleSubmission() {
           id: customerId   // set from previously fetched customer object
         }
       };
+      
+      let findMatchingVehicle=await axios.post("http://localhost:8087/api/vehicle/findMatching",body,
+        {
+          headers:{
+            "Authorization": `Bearer ${token}`
+          }
+        }
+      )
+      
+      if(findMatchingVehicle.data)
+      {
+        
+        alert('Vehicle Already Exists');
+        return;
+      }
+
 
       let responseVehicleSubmission=await axios.post("http://localhost:8087/api/vehicle/add",body,
         {

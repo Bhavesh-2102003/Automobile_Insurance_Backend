@@ -30,9 +30,16 @@ public class VehicleDetailsController {
 	@PostMapping("/api/vehicle/add")
 	public VehicleDetails addVehicleDetails(@RequestBody VehicleDetails vehicleDetails)
 	{
+		
 		Customer customer=customerService.findById(vehicleDetails.getCustomer().getId());
 		vehicleDetails.setCustomer(customer);
 		logger.info("A new vehicle has been added by customer "+vehicleDetails.getCustomer().getFirstName());
 		return vehicleDetailsService.addVehicleDetails(vehicleDetails);
+	}
+	
+	@PostMapping("/api/vehicle/findMatching")
+	public boolean findByRegistrationNumber(@RequestBody VehicleDetails vehicleDetails)
+	{
+		return vehicleDetailsService.findByRegistrationNumber(vehicleDetails);
 	}
 }
