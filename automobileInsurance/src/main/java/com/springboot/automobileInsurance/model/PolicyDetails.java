@@ -26,7 +26,7 @@ public class PolicyDetails {
     private Double coverageAmount;  
 
 	@Column(nullable = false)
-    private String coverageType;
+    private String coverageType; //comprehensive,third party,own damage 
 
     @Column(nullable = false)
     private String status="Active";

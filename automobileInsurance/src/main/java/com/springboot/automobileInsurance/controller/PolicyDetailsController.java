@@ -1,6 +1,7 @@
 package com.springboot.automobileInsurance.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -54,5 +55,9 @@ public class PolicyDetailsController {
 		return policyDetailsService.getAll();
 	}
 	
+	@GetMapping("/api/policy/coverage-counts")
+    public Map<String, Integer> getCoverageTypeCounts() {
+        return policyDetailsService.getCoverageTypeCounts();
+    }
 	
 }

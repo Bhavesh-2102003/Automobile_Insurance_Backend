@@ -43,7 +43,7 @@ public class ClaimSubmissionService {
 			throw new RuntimeException("Image Type Invalid");
 		}
 
-		String uploadPath = "C:\\Users\\karthick\\Desktop\\CaseStudy\\Backend\\CaseStudyReact\\public\\images";
+		String uploadPath = "C:\\Users\\CHARU\\OneDrive\\Desktop\\Backend\\ais_frontend\\public\\images";
 
 		/* Create directory */// Check if directory is present else create it
 		Files.createDirectories(Paths.get(uploadPath));

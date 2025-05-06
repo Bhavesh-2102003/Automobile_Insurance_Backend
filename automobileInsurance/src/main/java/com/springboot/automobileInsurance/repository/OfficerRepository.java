@@ -8,6 +8,8 @@ public interface OfficerRepository extends JpaRepository<Officer, Integer> {
 
 	Officer findByUserUsername(String username);
 
+	Officer findByUserId(int uId);
+
 	
 
 }

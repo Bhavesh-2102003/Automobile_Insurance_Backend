@@ -30,7 +30,7 @@ public class PolicyTemplate {
 	private String name;
 
 	@Column(length = 1000)
-	private String description; // Summary/details about the policy
+	private String description; //details about the policy
 
 	@Column(nullable = false)
 	private LocalDate startDate;
@@ -60,7 +60,7 @@ public class PolicyTemplate {
 	private String eligibilityCriteria; // Restrictions or requirements
 
 	@Column(length = 1000)
-	private String features; // Key features/benefits
+	private String features; // Key features or benefits
 	
 	@Enumerated(EnumType.STRING)
 	private Categories categories;
@@ -70,7 +70,7 @@ public class PolicyTemplate {
 	private double maxCoverageAmount;
 
 	@Column(length = 2000)
-	private String termsAndConditions; // Legal/informational text
+	private String termsAndConditions; // Legal or informational text
 
 	@ManyToOne
 	private Officer officer;
