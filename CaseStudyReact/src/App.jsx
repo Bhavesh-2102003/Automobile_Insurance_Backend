@@ -16,6 +16,7 @@ import ClaimSubmissionForm from './component/customer/ClaimSubmission'
 import ClaimTrackingPage from './component/customer/CustomerClaimTracking'
 import Profile from './component/customer/ProfileSection'
 import Settings from './component/customer/Settings'
+import PolicyPDF from './component/customer/PolicyPDF'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -34,6 +35,7 @@ function App() {
         <Route path="/customer/track-claim" element={<ClaimTrackingPage />}/>
         <Route path="/customer/profile" element={<Profile />} />
         <Route path="/customer/settings" element={<Settings />} />
+        <Route path="/customer/policypdf" element={<PolicyPDF />} />
       </Routes>
     </Router>
   )

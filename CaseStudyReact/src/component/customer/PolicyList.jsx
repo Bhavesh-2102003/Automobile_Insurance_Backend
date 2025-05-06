@@ -1,7 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Header from "./Header";
+import jsPDF from "jspdf";
+
 
 function PolicyList() {
 
@@ -10,7 +12,7 @@ function PolicyList() {
     const [claims,setClaims]=useState([]);
     const customerId=localStorage.getItem('customerId');
     const token=localStorage.getItem('token');
-
+    const location = useLocation();
     
 
     useEffect(()=>{
@@ -51,15 +53,57 @@ function PolicyList() {
       
   }
   getAllClaims();
-
-
-
     },[claims])
 
     const fileClaim=(policy)=>{
       console.log(policy);
       navigate("/customer/submit-claim",{state:{policy}});
     }
+
+    const generatePDF = (policy) => {
+        const doc = new jsPDF();
+        doc.setFontSize(16);
+        doc.text("Insurance Policy Details", 20, 20);
+    
+        const details = [
+          `Policy ID: ${policy.id}`,
+          "---------------------------------------------------------------------------------------------------------",
+          "Customer Details",
+          "---------------------------------------------------------------------------------------------------------",
+          `Customer name : ${policy.customer.firstName+" "+policy.customer.lastName}`,
+          `Contact : ${policy.customer.contact}`,
+          `Email Address : ${policy.customer.emailAddress}`,
+          `Address : ${policy.customer.address}`,
+          `Driving License Number : ${policy.vehicleDetails.drivingLicenseNo}`,
+          "---------------------------------------------------------------------------------------------------------",
+          "Vehicle Details",
+          "---------------------------------------------------------------------------------------------------------",
+        `Vehicle Type: ${policy.vehicleDetails.vehicleType}`,
+          `Model: ${policy.vehicleDetails.carVariant || policy.vehicleDetails.bikeModel}`,
+          `Registration Number: ${policy.vehicleDetails.registrationNumber}`,
+            `Fuel Type: ${policy.vehicleDetails.fuelType}`,
+            `Vehicle Make : ${policy.vehicleDetails.vehicleMake}`,
+            "---------------------------------------------------------------------------------------------------------",
+            "Policy Details",
+            "---------------------------------------------------------------------------------------------------------",
+          `Coverage Type: ${policy.coverageType}`,
+          `Coverage Amount: Rs.${policy.coverageAmount}`,
+          `Total Coverage: Rs.${policy.coverageAmount * 10}`,
+          `Status: ${policy.status}`,
+          `Start Date: ${policy.startDate}`,
+          `End Date: ${policy.endDate}`,
+        ];
+    
+        let y = 30;
+        details.forEach((line) => {
+          doc.setFontSize(12);
+          doc.text(line, 20, y);
+          y += 10;
+        });
+        doc.setFontSize(9)
+        doc.text("Thank you for choosing HexaCover",65,290);
+        doc.save(`Policy_${policy.id}.pdf`);
+      };
 
   // Status colors
   const statusColors = {
@@ -167,7 +211,8 @@ function PolicyList() {
 
                 <div className="flex space-x-3">
                   <Link
-                    to={`/policy/${policy.id}`}
+                    onClick={()=>{generatePDF(policy)}}
+                    state={{policy}}
                     className="flex-1 text-center py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition duration-200 flex items-center justify-center"
                   >
                     <i className="fas fa-eye mr-2"></i> View PDF

@@ -65,6 +65,7 @@ public class ClaimSubmissionController {
 	public ClaimTable uploadImage(@PathVariable int cId,@RequestParam MultipartFile file) throws IOException
 	{
 		//Image is uploaded to claimtable/imageURL based on customer ID in the path react/path/images
+		logger.info("Vehicle Image has been uploaded by customer ");
 		return claimSubmissionService.uploadImage(cId,file);
 	}
 	
@@ -73,6 +74,7 @@ public class ClaimSubmissionController {
 	{
 		//Get All mapping for getting claims by a particular customer in order to display in Tracking section
 		//The customer ID over here has been derived from localStorage
+		logger.info("All claims have been viewed by customer "+cId);
 		return claimSubmissionService.getAllClaims(cId);
 	}
 	
