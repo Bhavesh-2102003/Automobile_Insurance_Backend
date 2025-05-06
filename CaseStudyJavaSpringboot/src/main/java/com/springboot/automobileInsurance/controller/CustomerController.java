@@ -14,7 +14,7 @@ import com.springboot.automobileInsurance.model.User;
 import com.springboot.automobileInsurance.service.CustomerService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173/")
+//@CrossOrigin(origins = "http://localhost:5173/")
 public class CustomerController {
 	
 	@Autowired

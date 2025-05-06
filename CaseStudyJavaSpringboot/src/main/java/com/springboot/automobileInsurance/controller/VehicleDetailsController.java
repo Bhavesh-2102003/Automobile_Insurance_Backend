@@ -14,7 +14,7 @@ import com.springboot.automobileInsurance.service.CustomerService;
 import com.springboot.automobileInsurance.service.VehicleDetailsService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173/")
+//@CrossOrigin(origins = "http://localhost:5173/")
 
 public class VehicleDetailsController {
 	

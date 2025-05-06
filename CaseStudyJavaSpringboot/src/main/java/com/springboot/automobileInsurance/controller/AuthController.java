@@ -23,7 +23,7 @@ import com.springboot.automobileInsurance.service.AuthService;
 import com.springboot.automobileInsurance.service.MyUserService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173/")
+//@CrossOrigin(origins = "http://localhost:5173/")
 public class AuthController {
 
 	@Autowired
