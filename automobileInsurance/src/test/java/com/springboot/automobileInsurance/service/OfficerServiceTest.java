@@ -1,7 +1,24 @@
 package com.springboot.automobileInsurance.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.springboot.automobileInsurance.exception.InvalidIDException;
 import com.springboot.automobileInsurance.exception.InvalidUsernameException;
@@ -10,12 +27,7 @@ import com.springboot.automobileInsurance.model.User;
 import com.springboot.automobileInsurance.repository.AuthRepository;
 import com.springboot.automobileInsurance.repository.OfficerRepository;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.*;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.*;
 
 @SpringBootTest
 public class OfficerServiceTest {
