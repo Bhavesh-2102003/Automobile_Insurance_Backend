@@ -81,7 +81,6 @@ const ClaimTrackingPage = () => {
                 <div className="d-flex justify-content-between align-items-center">
                   <h5 className="mb-0 fw-bold">{claim.claimType}</h5>
                   {getStatusBadge(claim.status)}
-                  {console.log(claim)}
                 </div>
               </div>
 
@@ -133,7 +132,6 @@ const ClaimTrackingPage = () => {
                     <small className="text-muted">Damage Image</small>
                     {claim.imageUrl ? (
                         <div className="border rounded p-2">
-                            {console.log(claim.imageUrl)}
                             <img 
                             src={`/images/${claim.imageUrl.split('\\').pop()}`} 
                             alt="Claim Evidence" 

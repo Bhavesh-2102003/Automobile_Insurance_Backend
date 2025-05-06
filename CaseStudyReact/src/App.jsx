@@ -15,6 +15,7 @@ import CustomerLanding from './component/customer/CustomerLanding'
 import ClaimSubmissionForm from './component/customer/ClaimSubmission'
 import ClaimTrackingPage from './component/customer/CustomerClaimTracking'
 import Profile from './component/customer/ProfileSection'
+import Settings from './component/customer/Settings'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -32,6 +33,7 @@ function App() {
         <Route path="/customer/submit-claim" element={<ClaimSubmissionForm />} />
         <Route path="/customer/track-claim" element={<ClaimTrackingPage />}/>
         <Route path="/customer/profile" element={<Profile />} />
+        <Route path="/customer/settings" element={<Settings />} />
       </Routes>
     </Router>
   )

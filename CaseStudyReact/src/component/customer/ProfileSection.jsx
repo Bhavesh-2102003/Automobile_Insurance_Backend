@@ -4,16 +4,25 @@ import { FaUser, FaEnvelope, FaBirthdayCake, FaVenusMars,
          FaPhone, FaMapMarkerAlt, FaCity, FaGlobeAmericas, 
          FaUserCircle, FaCalendarAlt } from 'react-icons/fa';
 import Header from './Header';
+import { useNavigate } from 'react-router-dom';
          
 
 function Profile() {
     
   
   const [customer,setCustomer]=useState(null);
+  const [emailEdit,setEmailEdit]=useState(false);
+  const [contactEdit,setContactEdit]=useState(false);
+  const [addressEdit,setAddressEdit]=useState(false);
+  const [emailChange,setEmailChange]=useState(null);
+  const [contactChange,setContactChange]=useState(null);
+  const [addressChange,setAddressChange]=useState(null);
+  const customerId=localStorage.getItem('customerId');
+  const navigate=useNavigate();
+
 
   useEffect(()=>{
     const getCustomer=async()=>{
-        const customerId=localStorage.getItem('customerId');
         const token=localStorage.getItem('token');
 
         
@@ -40,7 +49,42 @@ function Profile() {
       </div>
     );
   }
+
+  const handleAddressChange=()=>{
+    axios.put(`http://localhost:8087/api/customer/editAddress/${customerId}`,null,
+      {
+        params:{
+          address:addressChange
+        }
+      }
+    )
+    setAddressEdit(false);
+    navigate(0);
+  }
+
+  const handleContactChange=()=>{
+    axios.put(`http://localhost:8087/api/customer/editContact/${customerId}`,null,
+      {
+        params:{
+          contact:contactChange
+        }
+      }
+    )
+    setContactEdit(false);
+    navigate(0);
+  }
   
+  const handleEmailChange=()=>{
+    axios.put(`http://localhost:8087/api/customer/editEmail/${customerId}`,null,
+      {
+        params:{
+          email:emailChange
+        }
+      }
+    )
+    setEmailEdit(false);
+    navigate(0);
+  }
 
   return (
     <div>
@@ -103,11 +147,94 @@ function Profile() {
                       </h5>
                       <div className="mb-3">
                         <small className="text-muted">Email Address</small>
-                        <p className="mb-0">{customer.emailAddress}</p>
+                        <button
+                          style={{
+                            backgroundColor: "#6a11cb",
+                            color: "white",
+                            border: "none",
+                            padding: "2px 6px",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                            fontSize:"15px",
+                            marginLeft:"5px"
+                          }}
+                          onClick={()=>{setEmailEdit(emailEdit?false:true)}}
+                        >
+                          Edit
+                        </button>
+                        {emailEdit?
+                        <div>
+                        <input 
+                        type="email"
+                        className="form-control mt-1"
+                        onChange={(event)=>{setEmailChange(event.target.value)}}
+                        />
+                        <button
+                        onClick={handleEmailChange}
+                        style={{
+                          backgroundColor: "#28a745", // green
+                          color: "white",
+                          border: "none",
+                          padding: "3px 16px",
+                          borderRadius: "6px",
+                          cursor: "pointer",
+                          fontWeight: "bold",
+                          fontSize: "15px",
+                          boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+                          marginTop:"5px"
+                        }}
+                      >
+                        Done
+                      </button>
+                        </div>:<p className="mb-0">{customer.emailAddress}</p>  
+                      }
                       </div>
                       <div>
                         <small className="text-muted">Phone Number</small>
-                        <p className="mb-0">{customer.contact}</p>
+                        <button
+                          style={{
+                            backgroundColor: "#6a11cb",
+                            color: "white",
+                            border: "none",
+                            padding: "2px 6px",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                            fontSize:"15px",
+                            marginLeft:"5px"
+                          }}
+                          onClick={()=>{setContactEdit(contactEdit?false:true)}}
+                        >
+                          Edit
+                        </button>
+                        {contactEdit?
+                        <div>
+                        <input 
+                        type="email"
+                        className="form-control mt-1"
+                        onChange={(event)=>{setContactChange(event.target.value)}}
+                        />
+                        <button
+                        onClick={handleContactChange}
+                        style={{
+                          backgroundColor: "#28a745", // green
+                          color: "white",
+                          border: "none",
+                          padding: "3px 16px",
+                          borderRadius: "6px",
+                          cursor: "pointer",
+                          fontWeight: "bold",
+                          fontSize: "15px",
+                          boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+                          marginTop:"5px"
+                        }}
+                      >
+                        Done
+                      </button>
+                        </div>:<p className="mb-0">{customer.contact}</p>  
+                      }
+                        
                       </div>
                     </div>
                   </div>
@@ -122,7 +249,50 @@ function Profile() {
                         <div className="col-md-6">
                           <div>
                             <small className="text-muted">Street Address</small>
-                            <p className="mb-0">{customer.address}</p>
+                            <button
+                          style={{
+                            backgroundColor: "#6a11cb",
+                            color: "white",
+                            border: "none",
+                            padding: "2px 6px",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                            fontSize:"15px",
+                            marginLeft:"5px"
+                          }}
+                          onClick={()=>{setAddressEdit(addressEdit?false:true)}}
+                        >
+                          Edit
+                        </button>
+                        {addressEdit?
+                        <div>
+                        <input 
+                        type="email"
+                        className="form-control mt-1"
+                        onChange={(event)=>{setAddressChange(event.target.value)}}
+                        />
+                        <button
+                        onClick={handleAddressChange}
+                        style={{
+                          backgroundColor: "#28a745", // green
+                          color: "white",
+                          border: "none",
+                          padding: "3px 16px",
+                          borderRadius: "6px",
+                          cursor: "pointer",
+                          fontWeight: "bold",
+                          fontSize: "15px",
+                          boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+                          marginTop:"5px"
+                        }}
+                      >
+                        Done
+                      </button>
+
+                        </div>
+                        :<p className="mb-0">{customer.address}</p>  
+                      }
                           </div>
                         </div>
                         <div className="col-md-3">
@@ -148,7 +318,7 @@ function Profile() {
                 borderBottomLeftRadius: '15px',
                 borderBottomRightRadius: '15px'
               }}>
-                <small className="text-muted">© {new Date().getFullYear()} Profile Page</small>
+                <small className="text-muted">© {new Date().getFullYear()} Hexacover</small>
               </div>
             </div>
           </div>

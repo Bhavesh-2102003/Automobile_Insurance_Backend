@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 
 function VehicleSubmission() {
   const token = useSelector((state) => state.user.token);
-  {console.log(token)}
   const [vehicleType, setVehicleType] = useState(null);
   const [registrationNumber, setRegistrationNumber] = useState(null);
   const [fuelType, setFuelType] = useState(null);
@@ -76,7 +75,6 @@ function VehicleSubmission() {
       )
 
       let body2=responseVehicleSubmission.data;
-      console.log(body);
       
       // Pass the vehicle details object to the Quote page
     navigate("/customer/quote", { state: { body,endDate,body2 } });

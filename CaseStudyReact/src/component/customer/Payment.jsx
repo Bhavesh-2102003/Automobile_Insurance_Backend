@@ -72,7 +72,6 @@ function Payment() {
             }
         )
 
-        console.log(responsePolicy.data);
         
     
       };

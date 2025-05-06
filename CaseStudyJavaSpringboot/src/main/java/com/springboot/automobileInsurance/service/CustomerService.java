@@ -61,4 +61,27 @@ public class CustomerService {
 		return optional.get();
 	}
 
+	public void editAddress(String address, int cId) {
+		Optional<Customer> optional=customerRepository.findById(cId);
+		Customer customer=optional.get();
+		customer.setAddress(address);
+		customerRepository.save(customer);
+		
+	}
+
+	public void editEmail(String email, int cId) {
+		Optional<Customer> optional=customerRepository.findById(cId);
+		Customer customer=optional.get();
+		customer.setEmailAddress(email);
+		customerRepository.save(customer);
+	}
+	
+	public void editContact(String contact, int cId) {
+		Optional<Customer> optional=customerRepository.findById(cId);
+		Customer customer=optional.get();
+		customer.setContact(contact);
+		customerRepository.save(customer);
+	}
+
+
 }
