@@ -42,6 +42,7 @@ public class Customer {
 
     @Column(length = 100)
     private String address;
+    
 
     public String getContact() {
 		return contact;
@@ -54,7 +55,7 @@ public class Customer {
 	private LocalDate createdAt;	
 
     @Column(length = 20)
-    private String status;
+    private String status="Active";
 
     @Column(length = 45, nullable = false)
     private String contact;

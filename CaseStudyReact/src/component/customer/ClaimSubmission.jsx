@@ -22,6 +22,8 @@ const ClaimSubmissionForm = () => {
   const formData=new FormData();
   const [claimId,setClaimId]=useState(null);
   const navigate =useNavigate();
+  const [isClaimSubmitted,setIsClaimSubmitted]=useState(false);
+
 
   const claimTypes = [
     'Collision',
@@ -74,6 +76,17 @@ const ClaimSubmissionForm = () => {
         "id":policy.vehicleDetails.id
       }
     }
+
+    if(claimType!=null &&  accidentLocation!=null && accidentDate!=null && damageDescription!=null && isClaimSubmitted==false && accidentLocation!=null)
+      {
+        setIsClaimSubmitted(true);
+      }
+      else
+      {
+        alert('Please fill all details');
+        return;
+      }
+
 
     let response=await axios.post("http://localhost:8087/api/claim/submit",body,{
       headers:{
@@ -354,7 +367,7 @@ const ClaimSubmissionForm = () => {
             </div>
 
             {/* Damage Photos Section */}
-            <div className="space-y-6">
+            {isClaimSubmitted?<div className="space-y-6">
               <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">Damage Evidence</h2>
               
               <div>
@@ -412,7 +425,8 @@ const ClaimSubmissionForm = () => {
                   Upload
                 </button>
               </div>
-            </div>
+            </div>:""}
+            
 
             
           </form>

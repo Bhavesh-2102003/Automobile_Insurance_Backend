@@ -26,7 +26,6 @@ function VehicleSubmission() {
 
   const addVehicleDetails=async(event)=>{
     event.preventDefault();
-    const username=localStorage.getItem('username');
     const token=localStorage.getItem('token');
     let response=await axios.get('http://localhost:8087/api/auth/user/details',
         {

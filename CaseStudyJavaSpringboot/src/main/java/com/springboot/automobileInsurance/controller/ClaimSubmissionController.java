@@ -6,15 +6,17 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.springboot.automobileInsurance.dto.ClaimUpdateDTO;
 import com.springboot.automobileInsurance.model.ClaimTable;
 import com.springboot.automobileInsurance.model.Customer;
 import com.springboot.automobileInsurance.model.PolicyDetails;
@@ -76,6 +78,11 @@ public class ClaimSubmissionController {
 		//The customer ID over here has been derived from localStorage
 		logger.info("All claims have been viewed by customer "+cId);
 		return claimSubmissionService.getAllClaims(cId);
+	}
+	
+	@PutMapping("/api/claim/update/{id}")
+	public ResponseEntity<String> updateClaim(@PathVariable int id, @RequestBody ClaimUpdateDTO claimUpdateDTO) {
+	    return claimSubmissionService.updateClaim(id, claimUpdateDTO);
 	}
 	
 }

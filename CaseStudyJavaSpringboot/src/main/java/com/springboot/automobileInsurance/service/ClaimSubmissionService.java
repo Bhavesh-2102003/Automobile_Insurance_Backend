@@ -10,11 +10,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.springboot.automobileInsurance.dto.ClaimUpdateDTO;
+import com.springboot.automobileInsurance.exception.InvalidIDException;
 import com.springboot.automobileInsurance.model.ClaimTable;
 import com.springboot.automobileInsurance.repository.ClaimSubmissionRepository;
 
@@ -89,6 +90,23 @@ public class ClaimSubmissionService {
 
 	public List<ClaimTable> getAllClaims(int cId) {
 		return claimSubmissionRepository.findByCustomerId(cId);
+	}
+	
+
+	public ResponseEntity<String> updateClaim(int id, ClaimUpdateDTO claimUpdateDTO) {
+		Optional<ClaimTable> optional = claimSubmissionRepository.findById(id);
+
+		if (optional.isEmpty()) {
+			throw new InvalidIDException("Invalid Claim Id" + id);
+		}
+
+		ClaimTable claimTable = optional.get();
+		claimTable.setStatus(claimUpdateDTO.getStatus());
+		claimTable.setFeedback(claimUpdateDTO.getFeedback());
+		claimTable.setApprovedAmount(claimUpdateDTO.getApprovedAmount());
+
+		claimSubmissionRepository.save(claimTable);
+		return ResponseEntity.ok("Claim updated successfully.");
 	}
 	
 	

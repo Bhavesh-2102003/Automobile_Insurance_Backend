@@ -3,19 +3,7 @@ import Header from './Header';
 import axios from 'axios';
 
 const ClaimTrackingPage = () => {
-  // Sample claims data (car & bike insurance)
-  const claims1 = [
-    {
-      id: 'CLAIM-2023-001',
-      type: 'Car Insurance',
-      status: 'Approved',
-      date: '15 May 2023',
-      amount: '$2,450',
-      description: 'Rear collision repair - Honda City',
-      vehicle: 'Honda City (DL8CAB1234)',
-      documents: 3
-    }
-  ];
+
 
   const [claims,setClaims]=useState([]);
   const customerId=localStorage.getItem('customerId');
@@ -46,6 +34,11 @@ const ClaimTrackingPage = () => {
     };
     return <span className={`badge ${statusStyles[status]} px-3 py-2 rounded-pill`}>{status}</span>;
   };
+
+
+  const proceedToPayment=(claim)=>{
+    alert(`You will receive a amount of Rs.${claim.approvedAmount}`);
+  }
 
   return (
     <div>
@@ -152,7 +145,7 @@ const ClaimTrackingPage = () => {
                     style={{ fontWeight: '500' }}
                     onClick={() => {
                     if (claim.status !== "PENDING") {
-                        proceedToPayment(claim);
+                      proceedToPayment(claim);
                     } else {
                         alert('Please wait while your claim is being reviewed.');
                     }
