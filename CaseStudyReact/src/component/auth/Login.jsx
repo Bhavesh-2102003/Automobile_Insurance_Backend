@@ -32,7 +32,7 @@ const customerLogin = async (event) => {
   };
 
   try {
-    let response = await axios.post("http://localhost:8087/api/auth/token/generate", body);//generate token using username,password
+    let response = await axios.post("http://localhost:8087/api/auth/token/generate", body);
     let token = response.data.token;
 
     // Save in Redux store

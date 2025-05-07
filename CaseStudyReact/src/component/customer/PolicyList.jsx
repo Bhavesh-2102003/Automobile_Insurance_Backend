@@ -53,7 +53,7 @@ function PolicyList() {
       
   }
   getAllClaims();
-    },[claims])
+    },[])
 
     const fileClaim=(policy)=>{
       console.log(policy);

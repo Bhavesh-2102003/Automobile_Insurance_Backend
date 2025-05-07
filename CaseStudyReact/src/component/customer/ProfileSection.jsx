@@ -19,11 +19,12 @@ function Profile() {
   const [addressChange,setAddressChange]=useState(null);
   const customerId=localStorage.getItem('customerId');
   const navigate=useNavigate();
+  const token=localStorage.getItem('token');
+
 
 
   useEffect(()=>{
     const getCustomer=async()=>{
-        const token=localStorage.getItem('token');
 
         
         let response=await axios.get(`http://localhost:8087/api/customer/getByCustomerId/${customerId}`,
@@ -55,7 +56,10 @@ function Profile() {
       {
         params:{
           address:addressChange
-        }
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
     )
     setAddressEdit(false);
@@ -67,7 +71,10 @@ function Profile() {
       {
         params:{
           contact:contactChange
-        }
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
     )
     setContactEdit(false);
@@ -79,7 +86,10 @@ function Profile() {
       {
         params:{
           email:emailChange
-        }
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
     )
     setEmailEdit(false);

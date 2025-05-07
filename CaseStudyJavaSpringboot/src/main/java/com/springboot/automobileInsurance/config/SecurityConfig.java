@@ -40,13 +40,20 @@ public class SecurityConfig {
 				.requestMatchers("/api/auth/token/generate").permitAll()	
 				.requestMatchers("/api/auth/user/details").authenticated()
 				.requestMatchers("/api/auth/signup").permitAll()
+				.requestMatchers("/api/claim/update/{cId}").permitAll()
 				.requestMatchers("/api/auth/login").authenticated()
 				.requestMatchers("/api/auth/hello").authenticated()
 				.requestMatchers("/api/customer/add").permitAll()
 				.requestMatchers("/api/vehicle/add").authenticated()
 				.requestMatchers("/api/customer/getByUserId/{uId}").authenticated()
-				.requestMatchers("/swagger-ui/**").permitAll()
-				.anyRequest().permitAll()
+				.requestMatchers("/api/customer/editAddress/{cId}").permitAll()
+				.requestMatchers(
+			            "/swagger-ui/**", 
+			            "/v3/api-docs/**", 
+			            "/swagger-resources/**", 
+			            "/webjars/**"
+			        ).permitAll()
+				.anyRequest().authenticated()
 			)
 			.sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

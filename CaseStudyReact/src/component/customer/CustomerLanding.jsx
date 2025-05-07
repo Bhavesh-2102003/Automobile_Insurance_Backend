@@ -9,10 +9,13 @@ import InsuranceServices from "./CustomerServicesSection";
 import TestimonialsSection from "./CustomerTestimonialSection";
 import Footer from "./CustomerFooterSection";
 import { useSelector } from "react-redux";
+import { selectToken, selectUsername } from "../../store/userSlice";
 
 function CustomerLanding()
 {
-    
+    const usernameFromRedux=useSelector(selectUsername);
+    const tokenFromRedux=useSelector(selectToken);
+    console.log(usernameFromRedux,tokenFromRedux);
     return(
         <>
         <Header />
@@ -22,6 +25,7 @@ function CustomerLanding()
         <InsuranceServices />
         <TestimonialsSection />
         <Footer />
+        
         </>
     )
 }
