@@ -37,8 +37,8 @@ function AddPolicyForm({ onPolicyAdded }) {
     setTotalCost(isNaN(cost) ? 0 : cost);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async ($event) => {
+    $event.preventDefault();
     setLoading(true);
     setMessage("");
     try {

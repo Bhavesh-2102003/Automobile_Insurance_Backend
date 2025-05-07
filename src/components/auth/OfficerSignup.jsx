@@ -15,8 +15,8 @@ function OfficerSignup() {
     const [message, setMessage] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    const signUp = async (e) => {
-        e.preventDefault();
+    const signUp = async ($event) => {
+        $event.preventDefault();
         setMessage(null);
         setLoading(true);
         try {
@@ -55,43 +55,43 @@ function OfficerSignup() {
                         <form className="row g-3" onSubmit={signUp} autoComplete="off">
                             <div className="col-md-6">
                                 <label className="form-label">Full Name</label>
-                                <input type="text" className="form-control form-control-lg" placeholder="Officer full name" onChange={e => setFullName(e.target.value)} />
+                                <input type="text" className="form-control form-control-lg" placeholder="Officer full name" onChange={$event => setFullName($event.target.value)} />
                             </div>
                             <div className="col-md-6">
                                 <label className="form-label">Email</label>
-                                <input type="email" className="form-control form-control-lg" placeholder="Email address" onChange={e => setEmail(e.target.value)} />
+                                <input type="email" className="form-control form-control-lg" placeholder="Email address" onChange={$event => setEmail($event.target.value)} />
                             </div>
                             <div className="col-md-6">
                                 <label className="form-label">Contact</label>
-                                <input type="text" className="form-control form-control-lg" placeholder="contact" onChange={e => setContact(e.target.value)} />
+                                <input type="text" className="form-control form-control-lg" placeholder="contact" onChange={$event => setContact($event.target.value)} />
                             </div>
                             <div className="col-md-6">
                                 <label className="form-label">Branch Location</label>
-                                <input type="text" className="form-control form-control-lg" placeholder="Branch location" onChange={e => setBranchLocation(e.target.value)} />
+                                <input type="text" className="form-control form-control-lg" placeholder="Branch location" onChange={$event => setBranchLocation($event.target.value)} />
                             </div>
                             <div className="col-md-12">
                                 <label className="form-label">Address</label>
-                                <input type="text" className="form-control form-control-lg" placeholder="Full address" onChange={e => setAddress(e.target.value)} />
+                                <input type="text" className="form-control form-control-lg" placeholder="Full address" onChange={$event => setAddress($event.target.value)} />
                             </div>
                             <div className="col-md-6">
                                 <label className="form-label">License No</label>
-                                <input type="text" className="form-control form-control-lg" placeholder="Officer license number" onChange={e => setLicenseNo(e.target.value)} />
+                                <input type="text" className="form-control form-control-lg" placeholder="Officer license number" onChange={$event => setLicenseNo($event.target.value)} />
                             </div>
                             <div className="col-md-6">
                                 <label className="form-label">ID No</label>
-                                <input type="text" className="form-control form-control-lg" placeholder="Officer ID number" onChange={e => setIdNo(e.target.value)} />
+                                <input type="text" className="form-control form-control-lg" placeholder="Officer ID number" onChange={$event => setIdNo($event.target.value)} />
                             </div>
                             <div className="col-md-12">
                                 <label className="form-label">Aadhaar No</label>
-                                <input type="text" className="form-control form-control-lg" placeholder="Officer Aadhaar number" onChange={e => setAadhaarNo(e.target.value)} />
+                                <input type="text" className="form-control form-control-lg" placeholder="Officer Aadhaar number" onChange={$event => setAadhaarNo($event.target.value)} />
                             </div>
                             <div className="col-md-6">
                                 <label className="form-label">Username</label>
-                                <input type="text" className="form-control form-control-lg" placeholder="Create username" onChange={e => setUsername(e.target.value)} />
+                                <input type="text" className="form-control form-control-lg" placeholder="Create username" onChange={$event => setUsername($event.target.value)} />
                             </div>
                             <div className="col-md-6">
                                 <label className="form-label">Password</label>
-                                <input type="password" className="form-control form-control-lg" placeholder="Create password" onChange={e => setPassword(e.target.value)} />
+                                <input type="password" className="form-control form-control-lg" placeholder="Create password" onChange={$event => setPassword($event.target.value)} />
                             </div>
                             <div className="col-12 d-grid gap-2 mt-2">
                                 <button type="submit" className="btn btn-primary btn-lg fw-bold" style={{ background: '#1e90ff', border: 'none' }} disabled={loading}>{loading ? 'Signing up...' : 'Sign Up'}</button>

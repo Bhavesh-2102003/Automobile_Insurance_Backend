@@ -7,9 +7,9 @@ import store from "./store/store";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 createRoot(document.getElementById("root")).render(
+  <BrowserRouter>
     <Provider store={store}>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
+      <App />
     </Provider>
+  </BrowserRouter>
 );

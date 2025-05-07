@@ -10,6 +10,8 @@ function OfficerLogin() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
+    
+
     const login = () => {
         if (!username) {
             setMsgUsername("Username cannot be blank");
@@ -46,6 +48,18 @@ function OfficerLogin() {
                     }
                 })
                 .then(resp => {
+                    const uId =resp.data.id; 
+                    axios.get(`http://localhost:8087/api/officer/getByuser/${uId}`,
+                        {
+                            headers: {
+                                "Authorization": `Bearer ${token}`
+                            }
+                        }
+                    ).then(UserResp=>{
+                        let UserId = UserResp.data.id;
+                        console.log(UserId);
+                        localStorage.setItem("UserId", UserId);
+                    })
                     setLoading(false);
                     if (resp.data.role === 'OFFICER') {
                         navigate("/officer/dashboard");
@@ -58,11 +72,6 @@ function OfficerLogin() {
                     setMsgUsername("Invalid Credentials");
                     console.log(err);
                 });
-            })
-            .catch(err => {
-                setLoading(false);
-                setMsgUsername("Invalid Credentials");
-                console.log(err);
             });
     };
 
@@ -82,8 +91,8 @@ function OfficerLogin() {
                             <input type="text" className="form-control form-control-lg" placeholder="Enter officer username"
                                 autoFocus
                                 value={username}
-                                onChange={e => {
-                                    setUsername(e.target.value);
+                                onChange={$event => {
+                                    setUsername($event.target.value);
                                     setMsgUsername(null);
                                 }} />
                         </div>
@@ -91,8 +100,8 @@ function OfficerLogin() {
                             <label className="form-label">Password</label>
                             <input type="password" className="form-control form-control-lg" placeholder="Enter password"
                                 value={password}
-                                onChange={e => {
-                                    setPassword(e.target.value);
+                                onChange={$event => {
+                                    setPassword($event.target.value);
                                     setMsgPassword(null);
                                 }} />
                         </div>

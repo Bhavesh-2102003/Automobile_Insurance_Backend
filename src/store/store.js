@@ -1,10 +1,11 @@
+// store/store.js
 import { configureStore } from "@reduxjs/toolkit";
-import customerStatsReducer from "./customerStatsSlice";
+import officerProfileReducer from "./action/officerProfileSlice";
 
 const store = configureStore({
-    reducer: {
-        customerStats: customerStatsReducer
-    }
+  reducer: {
+    officerProfile: officerProfileReducer,
+  },
 });
 
 export default store;

@@ -1,153 +1,185 @@
-import React, { useState } from 'react';
-import { Card, Button, Modal, Input, Tag } from 'antd';
-import { UserOutlined, CarOutlined, CalendarOutlined } from '@ant-design/icons';
+/* ClaimRequest.jsx */
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './ClaimRequest.css';
 
- const ClaimRequest = ({ claims }) => {
+function ClaimRequest() {
+  const [claims, setClaims] = useState([]);
+  const [searchId, setSearchId] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
   const [selectedClaim, setSelectedClaim] = useState(null);
-  const [rejectionReason, setRejectionReason] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState({ status: 'Approved', feedback: '', approvedAmount: 0 });
 
-  // Approval handler
-  const handleApprove = async (claimId) => {
+  // Fetch all claims on mount
+  useEffect(() => {
+    const fetchClaims = async () => {
+      try {
+        const res = await axios.get('http://localhost:8087/api/claim/all');
+        setClaims(res.data);
+      } catch (err) {
+        alert('Error loading claims');
+      }
+    }
+    fetchClaims()
+  }, []);
+
+  // Handler for updating claim
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    if (!formData.feedback) return alert('Feedback is required');
+    if (formData.status === 'Approved' && formData.approvedAmount <= 0)
+      return alert('Approved amount must be > 0');
+
+    const payload = {
+      ...formData,
+      approvedAmount: formData.status === 'Rejected' ? 0 : formData.approvedAmount,
+    };
+
     try {
-      await axios.put(`/api/claims/${claimId}`, { status: 'approved' });
-      // Refresh claims data
-    } catch (error) {
-      console.error('Approval failed:', error);
+      await axios.put(
+        `http://localhost:8087/api/claim/update/${selectedClaim.id}`,
+        payload
+      );
+      alert('Claim updated');
+      // reload
+      const res = await axios.get('http://localhost:8087/api/claim/all');
+      setClaims(res.data);
+      setShowModal(false);
+    } catch (err) {
+      alert('Update failed');
     }
   };
 
-  // Rejection handler
-  const handleRejectionSubmit = async () => {
-    try {
-      await axios.put(`/api/claims/${selectedClaim.id}`, {
-        status: 'rejected',
-        rejectionReason
-      });
-      setIsModalOpen(false);
-      // Refresh claims data
-    } catch (error) {
-      console.error('Rejection failed:', error);
-    }
-  };
-
-  const getStatusColor = (status) => {
-    switch(status.toLowerCase()) {
-      case 'approved': return 'green';
-      case 'rejected': return 'red';
-      default: return 'blue';
-    }
-  };
+  const statusClass = (s) => s.toLowerCase();
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-      {claims.map(claim => (
-        <Card
-          key={claim.id}
-          title={
-            <div className="flex justify-between items-center">
-              <span>Claim #{claim.id}</span>
-              <Tag color={getStatusColor(claim.status)}>
-                {claim.status}
-              </Tag>
-            </div>
-          }
-          extra={<Button type="link" onClick={() => setSelectedClaim(claim)}>Details</Button>}
-          className="shadow-lg hover:shadow-xl transition-shadow"
-        >
-          <div className="space-y-2">
-            <div>
-              <UserOutlined className="mr-2" />
-              <span className="font-semibold">Customer:</span> {claim.customer?.firstName} {claim.customer?.lastName}
-            </div>
-            <div>
-              <CarOutlined className="mr-2" />
-              <span className="font-semibold">Vehicle ID:</span> {claim.vehicleDetails?.id}
-            </div>
-            <div>
-              <CalendarOutlined className="mr-2" />
-              <span className="font-semibold">Accident Date:</span> 
-              {new Date(claim.accidentDate).toLocaleDateString()}
-            </div>
-            
-            <div className="mt-4 flex gap-2">
-              <Button 
-                type="primary" 
-                onClick={() => handleApprove(claim.id)}
-                disabled={claim.status !== 'pending'}
-              >
-                Approve
-              </Button>
-              <Button 
-                danger
-                onClick={() => {
-                  setSelectedClaim(claim);
-                  setIsModalOpen(true);
-                }}
-                disabled={claim.status !== 'pending'}
-              >
-                Reject
-              </Button>
-            </div>
-          </div>
-        </Card>
-      ))}
-
-      {/* Detail Modal */}
-      <Modal
-        title={`Claim Details #${selectedClaim?.id}`}
-        open={!!selectedClaim}
-        onCancel={() => setSelectedClaim(null)}
-        footer={null}
-        width={800}
-      >
-        {selectedClaim && (
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <h4 className="font-semibold mb-2">Claim Information</h4>
-              <p><span className="font-medium">Type:</span> {selectedClaim.claimType}</p>
-              <p><span className="font-medium">Location:</span> {selectedClaim.location}</p>
-              <p><span className="font-medium">Damage:</span> {selectedClaim.damageDescription}</p>
-              <p><span className="font-medium">Submitted:</span> 
-                {new Date(selectedClaim.submittedAt).toLocaleString()}
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Vehicle Details</h4>
-              <p><span className="font-medium">Vehicle ID:</span> {selectedClaim.vehicleDetails?.id}</p>
-              <p><span className="font-medium">Make:</span> {selectedClaim.vehicleDetails?.make}</p>
-              <p><span className="font-medium">Model:</span> {selectedClaim.vehicleDetails?.model}</p>
-              <p><span className="font-medium">Year:</span> {selectedClaim.vehicleDetails?.year}</p>
-            </div>
-            <div className="col-span-2">
-              <h4 className="font-semibold mb-2">Evidence</h4>
-              <img 
-                src={selectedClaim.imageUrl} 
-                alt="Damage evidence"
-                className="rounded-lg w-full h-48 object-cover"
-              />
-            </div>
-          </div>
-        )}
-      </Modal>
-
-      {/* Rejection Modal */}
-      <Modal
-        title={`Reject Claim #${selectedClaim?.id}`}
-        open={isModalOpen}
-        onOk={handleRejectionSubmit}
-        onCancel={() => setIsModalOpen(false)}
-      >
-        <Input.TextArea
-          rows={4}
-          value={rejectionReason}
-          onChange={(e) => setRejectionReason(e.target.value)}
-          placeholder="Please provide detailed reason for rejection..."
-          className="mt-4"
+    <div className="claim-container">
+      <h1>Claim Requests</h1>
+      <div className="controls">
+        <input
+          type="text"
+          placeholder="Search by ID"
+          value={searchId}
+          onChange={(e) => setSearchId(e.target.value)}
         />
-      </Modal>
+        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+          <option value="all">All</option>
+          <option value="Pending">Pending</option>
+          <option value="Approved">Approved</option>
+          <option value="Rejected">Rejected</option>
+          <option value="Under Review">Under Review</option>
+        </select>
+      </div>
+
+      <div className="claims-grid">
+        {claims
+          .filter(c =>
+            c.id.toString().includes(searchId) &&
+            (statusFilter === 'all' || c.status === statusFilter)
+          )
+          .map(c => (
+            <div
+              key={c.id} // unique identifier
+              className={`claim-card ${statusClass(c.status)}`}
+              onClick={() => {
+                setSelectedClaim(c);
+                setFormData({ status: c.status, feedback: c.feedback || '', approvedAmount: c.approvedAmount || 0 });
+                setShowModal(true);
+              }}
+            >
+              <div className="card-header">
+                <h2>Claim #{c.id}</h2>
+                <span className={`status-badge ${statusClass(c.status)}`}>{c.status}</span>
+              </div>
+              <p>Type: {c.claimType}</p>
+              <p>Date: {new Date(c.accidentDate).toLocaleDateString()}</p>
+            </div>
+          ))}
+      </div>
+
+      {showModal && selectedClaim && (
+        <div className="modal-overlay">
+          <div className="detail-modal">
+            <h2>Claim #{selectedClaim.id} Details</h2>
+            {/* Accident Info */}
+            <section className="detail-section">
+              <h3>Accident Information</h3>
+              <p><strong>Type:</strong> {selectedClaim.claimType}</p>
+              <p><strong>Location:</strong> {selectedClaim.location}</p>
+              <p><strong>Description:</strong> {selectedClaim.damageDescription}</p>
+              <div className="mb-3">
+                    <small className="text-muted">Damage Image</small>
+                    {selectedClaim.imageUrl ? (
+                        <div className="border rounded p-2">
+                            {console.log(selectedClaim.imageUrl)}
+                            <img 
+                            src={`/images/${selectedClaim.imageUrl.split('\\').pop()}`}
+                            alt="Claim Evidence" 
+                            style={{ maxWidth: '100%', height: 'auto' }} 
+                            />
+
+                        </div>
+                    ) : (
+                        <p className="mb-0 fw-bold text-muted">No image uploaded</p>
+                    )}
+                    </div>
+              <p><strong>Date:</strong> {new Date(selectedClaim.accidentDate).toLocaleDateString()}</p>
+            </section>
+            {/* Policy Info */}
+            <section className="detail-section">
+              <h3>Policy Details</h3>
+              <p><strong>ID:</strong> {selectedClaim.policyDetails?.id}</p>
+              <p><strong>Coverage:</strong> {selectedClaim.policyDetails?.coverageType}</p>
+              <p><strong>Amount:</strong> ₹{selectedClaim.policyDetails?.coverageAmount?.toLocaleString()}</p>
+            </section>
+            {/* Customer Info */}
+            <section className="detail-section">
+              <h3>Customer</h3>
+              <p><strong>Name:</strong> {selectedClaim.customer?.firstName} {selectedClaim.customer?.lastName}</p>
+              <p><strong>Contact:</strong> {selectedClaim.customer?.contact}</p>
+              <p><strong>Email:</strong> {selectedClaim.customer?.emailAddress}</p>
+            </section>
+
+            <form onSubmit={handleUpdate} className="update-form">
+              <label>Decision:</label>
+              <select value={formData.status} onChange={e => setFormData({ ...formData, status: e.target.value })}>
+                <option value="Approved">Approve</option>
+                <option value="Rejected">Reject</option>
+                <option value="Under Review">Under Review</option>
+              </select>
+
+              {formData.status === 'Approved' && (
+                <>
+                  <label>Approved Amount ($):</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0.01"
+                    value={formData.approvedAmount}
+                    onChange={e => setFormData({ ...formData, approvedAmount: parseFloat(e.target.value) })}
+
+                  />
+                </>
+              )}
+
+              <label>{formData.status === 'Approved' ? 'Approval Notes:' : 'Rejection Reason:'}</label>
+              <textarea
+                value={formData.feedback}
+                onChange={e => setFormData({ ...formData, feedback: e.target.value })}
+              />
+
+              <div className="modal-actions">
+                <button type="button" className="cancel-btn" onClick={() => setShowModal(false)}>Close</button>
+                <button type="submit" className={`action-btn ${statusClass(formData.status)}-btn`}> 
+                  {formData.status === 'Approved' ? 'Confirm Approval' : 'Confirm Rejection'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
-};
-
+}
 export default ClaimRequest;

@@ -1,13 +1,11 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { useDispatch } from "react-redux";
-import fetchCustomerCount from "../store/action/customerAction";
+
 
 function CustomerList() {
     const [customers, setCustomers] = useState([])
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(5);
-    const [totalPages, setTotalPages] = useState(0);
+    const [size, setSize] = useState(10);
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [contact, setContact] = useState("");
@@ -25,30 +23,35 @@ function CustomerList() {
     const [addCountry, setAddCountry] = useState("");
     const [addAddress, setAddAddress] = useState("");
     const [addStatus, setAddStatus] = useState("");
+    const [searchTerm, setSearchTerm] = useState('');
+    const [statusFilter, setStatusFilter] = useState('all');
 
-    const dispatch = useDispatch();
 
+    useEffect(() => {
     const getAllCustomers = async () => {
         try {
             const response = await axios.get(`http://localhost:8087/api/customer/all?page=${page}&size=${size}`)
             setCustomers(response.data)
-            // If your backend sends totalPages, set it here:
-            // setTotalPages(response.data.totalPages)
         }
         catch (err) {
             console.log(err)
         }
     }
 
-    useEffect(() => {
+    
         getAllCustomers()
     }, [page])
 
     const deleteCustomer = async (cid) => {
         try {
-            await axios.delete(`http://localhost:8087/api/customer/delete/${cid}`);
-            let temp = [...customers];
-            temp = temp.filter(c => c.id !== cid)
+            const token = localStorage.getItem('token');
+            await axios.delete(`http://localhost:8087/api/customer/delete/${cid}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            let temp = [...customers]; //is creating a copy of the customers array
+            temp = temp.filter(c => c.id !== cid) //is filtering the customers array to remove the deleted customer
             setCustomers(temp)
         }
         catch (err) {
@@ -64,18 +67,23 @@ function CustomerList() {
         setEmailAddress(customer.emailAddress || "");
     };
 
-    const updateCustomer = async ($e, cid) => {
-        $e.preventDefault();
+    const updateCustomer = async ($event, cid) => {
+        $event.preventDefault();
         try {
+            const token = localStorage.getItem('token');
             await axios.put('http://localhost:8087/api/customer/update/' + cid, {
                 'firstName': firstName,
                 'lastName': lastName,
                 'contact': contact,
                 'emailAddress': emailAddress
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
-            let temp = customers.map(c =>
+            let temp = customers.map(c => //is mapping the customers array to update the updated customer
                 c.id === cid
-                    ? { ...c, firstName, lastName, contact, emailAddress }
+                    ? { ...c, firstName, lastName, contact, emailAddress } //is updating the customer
                     : c
             );
             setCustomers(temp);
@@ -83,48 +91,53 @@ function CustomerList() {
             console.log(err)
         }
     }
-
-    const handleAddCustomer = async ($e) => {
-        $e.preventDefault();
+    let body = {
+        firstName: addFirstName,
+        lastName: addLastName,
+        contact: addContact,
+        emailAddress: addEmailAddress,
+        gender: addGender,
+        dateOfBirth: addDob,
+        city: addCity,
+        state: addState,
+        country: addCountry,
+        address: addAddress,
+        status: addStatus
+    }
+    
+    const handleAddCustomer = async ($event) => {
+        $event.preventDefault();
         try {
-            await axios.post('http://localhost:8087/api/customer/add', {
-                firstName: addFirstName,
-                lastName: addLastName,
-                contact: addContact,
-                emailAddress: addEmailAddress,
-                gender: addGender,
-                dateOfBirth: addDob,
-                city: addCity,
-                state: addState,
-                country: addCountry,
-                address: addAddress,
-                status: addStatus
+            const token = localStorage.getItem('token');
+            await axios.post('http://localhost:8087/api/customer/add', body, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
-            setShowAddModal(false);
-            setAddFirstName("");
-            setAddLastName("");
-            setAddContact("");
-            setAddEmailAddress("");
-            setAddGender("");
-            setAddDob("");
-            setAddCity("");
-            setAddState("");
-            setAddCountry("");
-            setAddAddress("");
-            setAddStatus("");
+            setShowAddModal(false); //is setting the showAddModal to false
             getAllCustomers();
-            dispatch(fetchCustomerCount()); // Refresh dashboard count after add
+            dispatch(fetchCustomerCount()); // Refresh dashboard count after the customer added
         } catch (err) {
             console.log(err);
         }
     };
 
-    const handlePrevPage = () => {
+    const handlePrevPage = () => { // to go back prev page  
         if (page > 0) setPage(page - 1);
     };
-    const handleNextPage = () => {
+    const handleNextPage = () => {  // to increment the page 
         if (customers.length === size) setPage(page + 1);
     };
+
+    
+    const filteredCustomers = customers.filter(customer => {
+    //filter the customer by name 
+        const matchesSearch = (customer.firstName + ' ' + customer.lastName).toLowerCase().includes(searchTerm.toLowerCase()) ||
+            customer.id.toString().includes(searchTerm);
+    //filter the status by active and the pending
+        const matchesStatus = statusFilter === 'all' || customer.status === statusFilter;
+        return matchesSearch && matchesStatus;
+    });
 
     return (
         <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #e0eafc 0%, #1e90ff 100%)', padding: '40px 0' }}>
@@ -134,7 +147,7 @@ function CustomerList() {
                     <button className="btn btn-success mb-3" onClick={() => setShowAddModal(true)}>
                         Add Customer
                     </button>
-                    {/* Add Customer Modal */}
+    {/*Add Customer Modal*/} 
                     {showAddModal && (
                         <div className="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }} tabIndex="-1">
                             <div className="modal-dialog">
@@ -147,23 +160,23 @@ function CustomerList() {
                                         <form onSubmit={handleAddCustomer}>
                                             <div className="mb-2">
                                                 <label>First Name</label>
-                                                <input type="text" value={addFirstName} className="form-control" onChange={e => setAddFirstName(e.target.value)} required />
+                                                <input type="text" value={addFirstName} className="form-control" onChange={$event => setAddFirstName($event.target.value)}  />
                                             </div>
                                             <div className="mb-2">
                                                 <label>Last Name</label>
-                                                <input type="text" value={addLastName} className="form-control" onChange={e => setAddLastName(e.target.value)} />
+                                                <input type="text" value={addLastName} className="form-control" onChange={$event => setAddLastName($event.target.value)} />
                                             </div>
                                             <div className="mb-2">
                                                 <label>Contact</label>
-                                                <input type="text" value={addContact} className="form-control" onChange={e => setAddContact(e.target.value)} />
+                                                <input type="text" value={addContact} className="form-control" onChange={$event => setAddContact($event.target.value)} />
                                             </div>
                                             <div className="mb-2">
                                                 <label>Email</label>
-                                                <input type="email" value={addEmailAddress} className="form-control" onChange={e => setAddEmailAddress(e.target.value)} />
+                                                <input type="email" value={addEmailAddress} className="form-control" onChange={$event => setAddEmailAddress($event.target.value)} />
                                             </div>
                                             <div className="mb-2">
                                                 <label>Gender</label>
-                                                <select value={addGender} className="form-control" onChange={e => setAddGender(e.target.value)} required>
+                                                <select value={addGender} className="form-control" onChange={$event => setAddGender($event.target.value)} >
                                                     <option value="">Select Gender</option>
                                                     <option value="Male">Male</option>
                                                     <option value="Female">Female</option>
@@ -172,27 +185,27 @@ function CustomerList() {
                                             </div>
                                             <div className="mb-2">
                                                 <label>Date of Birth</label>
-                                                <input type="date" value={addDob} className="form-control" onChange={e => setAddDob(e.target.value)} />
+                                                <input type="date" value={addDob} className="form-control" onChange={$event => setAddDob($event.target.value)} />
                                             </div>
                                             <div className="mb-2">
                                                 <label>City</label>
-                                                <input type="text" value={addCity} className="form-control" onChange={e => setAddCity(e.target.value)} />
+                                                <input type="text" value={addCity} className="form-control" onChange={$event => setAddCity($event.target.value)} />
                                             </div>
                                             <div className="mb-2">
                                                 <label>State</label>
-                                                <input type="text" value={addState} className="form-control" onChange={e => setAddState(e.target.value)} />
+                                                <input type="text" value={addState} className="form-control" onChange={$event => setAddState($event.target.value)} />
                                             </div>
                                             <div className="mb-2">
                                                 <label>Country</label>
-                                                <input type="text" value={addCountry} className="form-control" onChange={e => setAddCountry(e.target.value)} />
+                                                <input type="text" value={addCountry} className="form-control" onChange={$event => setAddCountry($event.target.value)} />
                                             </div>
                                             <div className="mb-2">
                                                 <label>Address</label>
-                                                <input type="text" value={addAddress} className="form-control" onChange={e => setAddAddress(e.target.value)} />
+                                                <input type="text" value={addAddress} className="form-control" onChange={$event => setAddAddress($event.target.value)} />
                                             </div>
                                             <div className="mb-2">
                                                 <label>Status</label>
-                                                <select value={addStatus} className="form-control" onChange={e => setAddStatus(e.target.value)} required>
+                                                <select value={addStatus} className="form-control" onChange={$event => setAddStatus($event.target.value)} >
                                                     <option value="">Select Status</option>
                                                     <option value="Active">Active</option>
                                                     <option value="Inactive">Inactive</option>
@@ -205,6 +218,27 @@ function CustomerList() {
                             </div>
                         </div>
                     )}
+                    <div className="row g-3 mb-4 align-items-center">
+                        <div className="col-md-4">
+                            <input
+                                type="text"
+                                placeholder="Search by name or ID"
+                                className="form-control"
+                                value={searchTerm}
+                                onChange={($event) => setSearchTerm($event.target.value)}
+                            />
+                        </div>
+                        <div className="col-md-4">
+                            <select 
+                                className="form-select"
+                                value={statusFilter}
+                                onChange={($event) => setStatusFilter($event.target.value)}
+                            >
+                                <option value="all">All Status</option>
+                                <option value="Active">Active</option>
+                            <option value="Pending">Pending</option>
+                            </select>
+                    </div>
                     <div className="table-responsive" style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.12)', borderRadius: '16px', padding: '32px', background: '#fff' }}>
                         <table className="table table-bordered table-hover align-middle" style={{ fontSize: '1.1rem', minWidth: '1200px' }}>
                             <thead className="table-dark">
@@ -227,7 +261,8 @@ function CustomerList() {
                             </thead>
                             <tbody>
 
-                                {(Array.isArray(customers) ? customers : []).map((c, idx) => (
+                                {(Array.isArray(filteredCustomers) ? filteredCustomers : []).map((c, idx) => ( 
+
                                     <tr key={c.id || idx}>
                                         <td>{c.id}</td>
                                         <td>{c.firstName}</td>
@@ -249,7 +284,7 @@ function CustomerList() {
                                                 <button className="btn btn-danger btn-sm" style={{ fontSize: '1rem', minWidth: '70px' }} onClick={() => deleteCustomer(c.id)}>Delete</button>
                                                 <button className="btn btn-info btn-sm" style={{ fontSize: '1rem', minWidth: '70px' }} data-bs-toggle="modal" data-bs-target={`#update-${c.id}`} onClick={() => openUpdateModal(c)}>Update</button>
                                             </div>
-                                            {/* Modal for update */}
+            {/* Modal for update the customer details like the name,email and contact*/}
                                             <div className="modal fade" id={`update-${c.id}`} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div className="modal-dialog">
                                                     <div className="modal-content">
@@ -258,7 +293,7 @@ function CustomerList() {
                                                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div className="modal-body">
-                                                            <form onSubmit={($e) => updateCustomer($e, c.id)}>
+                                                            <form onSubmit={($$event) => updateCustomer($$event, c.id)}>
                                                                 <div className="mb-3">
                                                                     <label>First Name</label>
                                                                     <input type="text" value={selectedCustomerId === c.id ? firstName : c.firstName} className="form-control" onChange={($event) => { setFirstName($event.target.value) }} />
@@ -295,7 +330,10 @@ function CustomerList() {
                 </div>
             </div>
         </div>
-    )
+    </div>
+
+    );
+
 }
 
 export default CustomerList

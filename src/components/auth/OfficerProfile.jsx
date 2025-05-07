@@ -1,134 +1,168 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Form, Button, Alert } from 'react-bootstrap';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import fetchOfficerProfile from "./../../store/action/fetchOfficerProfile";
+import "./../OfficerProfile.css";
+import axios from "axios";
 
 const OfficerProfile = () => {
-  const [profile, setProfile] = useState({
-    fullName: '',
-    email: '',
-    contact: '',
-    address: '',
-    branchLocation: 'Mumbai',
-    licenseNo: '',
-    idNo: '',
-    aadhaarNo: ''
-  });
+  const dispatch = useDispatch();
+  const officer = useSelector((state) => state.officerProfile.officer);
   const [editMode, setEditMode] = useState(false);
-  const [error, setError] = useState('');
-  const id = localStorage.getItem('id'); // Get from your auth system
-  
+  const [form, setForm] = useState({ contact: "", address: "", branchLocation: "" });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    
-    fetchProfile();
-  }, []);
+    dispatch(fetchOfficerProfile());
+  }, [dispatch]);
 
-  const fetchProfile = async () => {
-    try {
-      const response = await axios.get(`http://localhost:8087/api/officer/profile/${id}`);
-      setProfile(response.data);
-    } catch (err) {
-      setError('Failed to load profile data');
+  useEffect(() => {
+    if (officer) {
+      setForm({
+        contact: officer.contact || "",
+        address: officer.address || "",
+        branchLocation: officer.branchLocation || "",
+      });
     }
+  }, [officer]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleEdit = () => {
+    setEditMode(true);
+    setSuccess("");
+    setError("");
+  };
+
+  const handleCancel = () => {
+    setEditMode(false);
+    setForm({
+      contact: officer.contact || "",
+      address: officer.address || "",
+      branchLocation: officer.branchLocation || "",
+    });
+    setSuccess("");
+    setError("");
+  };
+
+  const handleSave = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setSuccess("");
+    setError("");
     try {
-      const response = await axios.put(`http://localhost:8087/api/officer/profile/${id}`, profile);
-      setProfile(response.data);
+      const token = localStorage.getItem("token");
+      await axios.put(
+        `http://localhost:8087/api/officer/update/profile/${officer.id}`,
+        {
+          contact: form.contact,
+          address: form.address,
+          branchLocation: form.branchLocation,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setSuccess("Profile updated successfully!");
       setEditMode(false);
-      setError('');
+      dispatch(fetchOfficerProfile());
     } catch (err) {
-      setError('Update failed: ' + (err.response?.data?.message || err.message));
+      setError("Failed to update profile.");
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (!officer) return <div>Loading...</div>;
 
   return (
-    <div className="container mt-5">
-      <Card className="shadow-lg">
-        <Card.Header className="bg-primary text-white">
-          <h3 className="mb-0">Officer Profile</h3>
-        </Card.Header>
-        
-        <Card.Body>
-          {error && <Alert variant="danger">{error}</Alert>}
-
-          <Form onSubmit={handleSubmit}>
-            {/* Editable Fields */}
-            <Form.Group className="mb-3">
-              <Form.Label>Full Name</Form.Label>
-              <Form.Control
-                type="text"
-                value={profile.fullName}
-                onChange={(e) => setProfile({...profile, fullName: e.target.value})}
-                disabled={!editMode}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Contact Number</Form.Label>
-              <Form.Control
-                type="tel"
-                value={profile.contact}
-                onChange={(e) => setProfile({...profile, contact: e.target.value})}
-                disabled={!editMode}
-                pattern="[0-9]{10}"
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Branch Location</Form.Label>
-              <Form.Select
-                value={profile.branchLocation}
-                onChange={(e) => setProfile({...profile, branchLocation: e.target.value})}
-                disabled={!editMode}
-              >
-                <option>Mumbai</option>
-                <option>Delhi</option>
-                <option>Bangalore</option>
-                <option>Hyderabad</option>
-                <option>Chennai</option>
-                <option>Kolkata</option>
-                
-              </Form.Select>
-            </Form.Group>
-
-            {/* Read-only Fields */}
-            <Form.Group className="mb-3">
-              <Form.Label>Email</Form.Label>
-              <Form.Control plaintext readOnly value={profile.email} />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>License Number</Form.Label>
-              <Form.Control plaintext readOnly value={profile.licenseNo} />
-            </Form.Group>
-
-            {/* Action Buttons */}
-            <div className="d-flex justify-content-end gap-2 mt-4">
-              {editMode ? (
-                <>
-                  <Button variant="secondary" onClick={() => setEditMode(false)}>
-                    Cancel
-                  </Button>
-                  <Button variant="primary" type="submit">
-                    Save Changes
-                  </Button>
-                </>
-              ) : (
-                <Button variant="outline-primary" onClick={() => setEditMode(true)}>
-                  Edit Profile
-                </Button>
-              )}
-            </div>
-          </Form>
-        </Card.Body>
-      </Card>
+    <div className="profile-container" style={{ maxWidth: 600, margin: "40px auto", background: "#fff", borderRadius: 8, boxShadow: "0 2px 8px #e0eafc", padding: 32 }}>
+      <h2 style={{ textAlign: "center", marginBottom: 24 }}>Officer Profile</h2>
+      {/* Move Edit button outside the form */}
+      {!editMode && (
+        <div style={{ textAlign: "right", marginBottom: "16px" }}>
+          <button type="button" className="edit-btn" onClick={handleEdit}>
+            Edit
+          </button>
+        </div>
+      )}
+      <form onSubmit={handleSave} autoComplete="off">
+        {/* ... all your profile fields ... */}
+        <div className="profile-field"><strong>ID:</strong> {officer.id}</div>
+        <div className="profile-field"><strong>Full Name:</strong> {officer.fullName}</div>
+        <div className="profile-field"><strong>Email:</strong> {officer.email}</div>
+        <div className="profile-field"><strong>License No:</strong> {officer.licenseNo}</div>
+        <div className="profile-field"><strong>ID No:</strong> {officer.idNo}</div>
+        <div className="profile-field"><strong>Aadhaar No:</strong> {officer.aadhaarNo}</div>
+        <div className="profile-field"><strong>User:</strong> {officer.user ? officer.user.username || officer.user.id : "-"}</div>
+        <div className="profile-field">
+          <strong>Contact:</strong>{" "}
+          {editMode ? (
+            <input
+              type="text"
+              name="contact"
+              value={form.contact}
+              onChange={handleChange}
+              className="form-control"
+              disabled={loading}
+              required
+            />
+          ) : (
+            <span style={{ marginLeft: 8 }}>{officer.contact}</span>
+          )}
+        </div>
+        <div className="profile-field">
+          <strong>Address:</strong>{" "}
+          {editMode ? (
+            <textarea
+              name="address"
+              value={form.address}
+              onChange={handleChange}
+              className="form-control"
+              disabled={loading}
+              required
+            />
+          ) : (
+            <span style={{ marginLeft: 8 }}>{officer.address}</span>
+          )}
+        </div>
+        <div className="profile-field">
+          <strong>Branch Location:</strong>{" "}
+          {editMode ? (
+            <input
+              type="text"
+              name="branchLocation"
+              value={form.branchLocation}
+              onChange={handleChange}
+              className="form-control"
+              disabled={loading}
+              required
+            />
+          ) : (
+            <span style={{ marginLeft: 8 }}>{officer.branchLocation}</span>
+          )}
+        </div>
+        {/* Only show Save/Cancel in edit mode */}
+        {editMode && (
+          <div className="form-group" style={{ marginTop: 24, textAlign: "center" }}>
+            <button type="submit" className="save-btn" disabled={loading} style={{ marginRight: 8 }}>
+              {loading ? "Saving..." : "Save"}
+            </button>
+            <button type="button" className="cancel-btn" onClick={handleCancel} disabled={loading}>
+              Cancel
+            </button>
+          </div>
+        )}
+        {success && <div className="success">{success}</div>}
+        {error && <div className="error">{error}</div>}
+      </form>
     </div>
   );
-};
-
-export default OfficerProfile;
+}
+export default OfficerProfile

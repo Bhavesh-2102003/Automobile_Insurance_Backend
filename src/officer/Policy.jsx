@@ -1,27 +1,17 @@
 import React, { useEffect, useState } from "react";
-import './Policy.css';
 import axios from "axios";
+import './Policy.css';
 
 function Policy() {
   const [policies, setPolicies] = useState([]);
+  const [filteredPolicies, setFilteredPolicies] = useState([]);
   const [expandedPolicyId, setExpandedPolicyId] = useState(null);
-  
-  const token = localStorage.getItem('token');
-  
-  useEffect(() => {
-    async function fetchPolicies() {
-      try {
-        const res = await axios.get(`http://localhost:8087/api/policy/all`, {
-          headers: { "Authorization": `Bearer ${token}` }
-        });
-        setPolicies(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    fetchPolicies();
-  }, [token]);
+  const [searchId, setSearchId] = useState('');
+  const [selectedCoverageType, setSelectedCoverageType] = useState('');
 
+  const token = localStorage.getItem('token');
+
+  // Utility: Generate colored status badge
   const getStatusBadge = (status) => {
     const statusColors = {
       Active: 'bg-success',
@@ -31,106 +21,116 @@ function Policy() {
     return `<span class="badge ${statusColors[status] || 'bg-secondary'} rounded-pill">${status}</span>`;
   };
 
+  // Fetch all policies once on component load
+  useEffect(() => {
+    async function fetchPolicies() {
+      try {
+        const res = await axios.get('http://localhost:8087/api/policy/all', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setPolicies(res.data);
+      } catch (error) {
+        console.error("Error fetching policies:", error);
+      }
+    }
+    fetchPolicies();
+  }, []);
+
+  // Filter policies when searchId or coverageType changes
+  useEffect(() => {
+    const filtered = policies.filter(policy => {
+      if (!policy) return false;
+
+      const policyId = String(policy.id || '').toLowerCase();
+      const searchTerm = searchId.toLowerCase();
+      const idMatch = policyId.includes(searchTerm);
+
+      const coverageType = (policy.coverageType || '').toLowerCase().trim();
+      const coverageMatch = selectedCoverageType
+        ? coverageType === selectedCoverageType.toLowerCase().trim()
+        : true;
+
+      return idMatch && coverageMatch;
+    });
+
+    setFilteredPolicies(filtered);
+  }, [searchId, selectedCoverageType, policies]);
+
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #e0eafc 0%, #1e90ff 100%)', padding: '40px 0' }}>
       <div className="container-fluid">
         <div className="add-policy-container">
-          <div className="header-section mb-5">
-            <h1 className="display-5 fw-bold text-primary">Insurance Policies</h1>
+          <h1 className="text-primary mb-4">Insurance Policies</h1>
+
+          <div className="row g-3 mb-4">
+            {/* Search Input */}
+            <div className="col-md-6">
+              <input
+                type="text"
+                className="form-control form-control-lg"
+                placeholder="Search by Policy ID..."
+                value={searchId}
+                onChange={e => setSearchId(e.target.value)}
+              />
+            </div>
+
+            {/* Coverage Filter Dropdown */}
+            <div className="col-md-6">
+              <select
+                className="form-select form-select-lg"
+                value={selectedCoverageType}
+                onChange={e => setSelectedCoverageType(e.target.value)}
+              >
+                <option value="">All Coverage Types</option>
+                <option value="Comprehensive">Comprehensive</option>
+                <option value="Third Party">Third Party</option>
+                <option value="Own Damage">Own Damage</option>
+              </select>
+            </div>
           </div>
 
+          {/* Policy Cards */}
           <div className="row g-4">
-            {policies.map((policy) => (
-              <div className="col-12 col-md-6 col-xl-4" key={policy.id}>
-                <div 
-                  className={`card policy-card shadow-lg ${expandedPolicyId === policy.id ? 'expanded' : ''}`}
+            {filteredPolicies.map(policy => (
+              <div className="col-md-6 col-lg-4" key={policy.id}>
+                <div
+                  className="card shadow policy-card"
                   onClick={() => setExpandedPolicyId(prev => prev === policy.id ? null : policy.id)}
                 >
-                  <div className="card-header bg-transparent">
-                    <div className="d-flex justify-content-between align-items-center">
-                      <div>
-                        <h3 className="mb-1">#Policy{policy.id}</h3>
-                        <small className="text-muted">
-                          {new Date(policy.startDate).toLocaleDateString('en-IN')} - 
-                          {new Date(policy.endDate).toLocaleDateString('en-IN')}
-                        </small>
-                      </div>
-                      <span dangerouslySetInnerHTML={{ __html: getStatusBadge(policy.status) }} />
+                  <div className="card-header d-flex justify-content-between">
+                    <div>
+                      <h5>#Policy{policy.id}</h5>
+                      <small>
+                        {new Date(policy.startDate).toLocaleDateString()} - 
+                        {new Date(policy.endDate).toLocaleDateString()}
+                      </small>
                     </div>
+                    <span dangerouslySetInnerHTML={{ __html: getStatusBadge(policy.status) }} />
                   </div>
 
                   <div className="card-body">
-                    <div className="d-flex justify-content-between align-items-center">
-                      <div>
-                        <span className="badge bg-primary fs-6 mb-2">
-                          {policy.coverageType}
-                        </span>
-                        <h5 className="mb-0">₹{policy.coverageAmount.toLocaleString()}</h5>
-                      </div>
-                      <i className={`bi ${
-                        policy.vehicleDetails?.vehicleType === 'Car' 
-                          ? 'bi-car-front fs-1 text-info' 
-                          : 'bi-bicycle fs-1 text-success'
-                      }`} />
-                    </div>
+                    <h6>{policy.coverageType}</h6>
+                    <p>₹{policy.coverageAmount.toLocaleString()}</p>
 
                     {expandedPolicyId === policy.id && (
-                      <div className="mt-4 pt-3 border-top">
-                        <div className="row g-3">
-                          <div className="col-12">
-                            <h5 className="text-primary mb-3">
-                              <i className="bi bi-person-circle me-2"></i>
-                              Customer Details
-                            </h5>
-                            <div className="d-flex align-items-center mb-3">
-                              <div className="bg-primary text-white rounded-circle p-2 me-3">
-                                {policy.customer?.firstName?.[0]}
-                              </div>
-                              <div>
-                                <p className="mb-0 fw-bold fs-5">
-                                  {policy.customer?.firstName} {policy.customer?.lastName}
-                                </p>
-                                <small className="text-muted">{policy.customer?.emailAddress}</small>
-                              </div>
-                            </div>
-                            <div className="row small g-2">
-                              <div className="col-4">Contact</div>
-                              <div className="col-8">{policy.customer?.contact}</div>
-                              <div className="col-4">Location</div>
-                              <div className="col-8">
-                                {policy.customer?.city}, {policy.customer?.state}
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="col-12">
-                            <h5 className="text-primary mb-3">
-                              <i className="bi bi-car-front me-2"></i>
-                              Vehicle Details
-                            </h5>
-                            <div className="row small g-2">
-                              <div className="col-4">Registration</div>
-                              <div className="col-8">{policy.vehicleDetails?.registrationNumber}</div>
-                              <div className="col-4">Make/Model</div>
-                              <div className="col-8">
-                                {policy.vehicleDetails?.vehicleMake}{' '}
-                                {policy.vehicleDetails?.carVariant || policy.vehicleDetails?.bikeModel}
-                              </div>
-                              <div className="col-4">Fuel Type</div>
-                              <div className="col-8">{policy.vehicleDetails?.fuelType}</div>
-                              <div className="col-4">Previous Insurer</div>
-                              <div className="col-8">
-                                {policy.vehicleDetails?.previousInsuranceProvider}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <>
+                        <hr />
+                        <p><strong>Customer:</strong> {policy.customer?.firstName} {policy.customer?.lastName}</p>
+                        <p><strong>Email:</strong> {policy.customer?.emailAddress}</p>
+                        <p><strong>Vehicle:</strong> {policy.vehicleDetails?.vehicleMake} - {policy.vehicleDetails?.vehicleType}</p>
+                      </>
                     )}
                   </div>
                 </div>
               </div>
             ))}
+
+            {/* No Results */}
+            {filteredPolicies.length === 0 && (
+              <div className="text-center text-white mt-4">
+                <h5>No policies found.</h5>
+              </div>
+            )}
           </div>
         </div>
       </div>
