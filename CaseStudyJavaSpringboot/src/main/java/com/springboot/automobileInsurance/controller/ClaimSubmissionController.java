@@ -80,7 +80,7 @@ public class ClaimSubmissionController {
 		return claimSubmissionService.getAllClaims(cId);
 	}
 	
-	@PutMapping("/api/claim/update/{id}")
+	@PutMapping("/	api/claim/update/{id}")
 	public ResponseEntity<String> updateClaim(@PathVariable int id, @RequestBody ClaimUpdateDTO claimUpdateDTO) {
 	    return claimSubmissionService.updateClaim(id, claimUpdateDTO);
 	}
