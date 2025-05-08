@@ -11,11 +11,16 @@ function ClaimRequest() {
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ status: 'Approved', feedback: '', approvedAmount: 0 });
 
+  const token = localStorage.getItem('token')
   // Fetch all claims on mount
   useEffect(() => {
     const fetchClaims = async () => {
       try {
-        const res = await axios.get('http://localhost:8087/api/claim/all');
+        const res = await axios.get('http://localhost:8087/api/claim/all',{
+            headers:{
+              Authorization:`Bearer ${token}`
+            }
+        });
         setClaims(res.data);
       } catch (err) {
         alert('Error loading claims');
@@ -39,11 +44,19 @@ function ClaimRequest() {
     try {
       await axios.put(
         `http://localhost:8087/api/claim/update/${selectedClaim.id}`,
-        payload
+        payload,{
+          headers:{
+            Authorization:`Bearer ${token}`
+          }
+      }
       );
       alert('Claim updated');
       // reload
-      const res = await axios.get('http://localhost:8087/api/claim/all');
+    const res = await axios.get('http://localhost:8087/api/claim/all',{
+      headers:{
+        Authorization:`Bearer ${token}`
+      }
+  });
       setClaims(res.data);
       setShowModal(false);
     } catch (err) {

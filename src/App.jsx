@@ -11,6 +11,7 @@ import AddPolicy from "./officer/AddPolicy";
 import AddPolicyForm from "./officer/AddPolicyForm";
 import CustomerList from "./officer/CustomerList";
 import ClaimRequest from "./officer/ClaimRequest";
+import CalculateClaimAmount from "./officer/CalculateClaimAmount";
 import  fetchOfficerProfile from "./store/action/fetchOfficerProfile";
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
       <Route path="officer/add-policy-form" element={<AddPolicyForm />} />
       <Route path="officer/claims-request" element={<ClaimRequest />} />
       <Route path="officer/profile" element={<OfficerProfile />} />
+      <Route path="officer/claim-amount-calculator" element={<CalculateClaimAmount />} />
     </Routes>
   );
 }

@@ -8,8 +8,10 @@ function AddPolicy() {
   const [policies, setPolicies] = useState([]);
   const [selectedPolicy, setSelectedPolicy] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  
   const token = localStorage.getItem('token');
   const username = localStorage.getItem('username');
+
   useEffect(() => {
     fetchPolicies();
   }, []);

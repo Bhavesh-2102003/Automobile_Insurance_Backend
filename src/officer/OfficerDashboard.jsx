@@ -104,16 +104,19 @@ function OfficerDashboard() {
               </div>
             </div>
           </div>
+
           <div className="col-md-3">
             <div className="card shadow border-0 text-center">
               <div className="card-body">
-                <h5 className="card-title">Officer profile</h5>
-                <p>View and Update your profile</p>
-                <Link to="/officer/profile" className="btn btn-primary">Go to Profile</Link>
+                <h5 className="card-title">Claim Amount Calculator</h5>
+                <p>Estimate claim approval amount for any policy </p>
+                <Link to="/officer/claim-amount-calculator" className="btn btn-primary">Open Calculator</Link>
               </div>
             </div>
           </div>
         </div>
+          
+          
 
         {/* Place the CoverageChart at the bottom */}
         <div className="row mt-4">
@@ -122,8 +125,29 @@ function OfficerDashboard() {
           </div>
         </div>
 
-        {/* Logout section */}
-        <div className="row justify-content-center g-4 mt-4">
+        
+        <div className="row justify-content-center g-4 mt-4"> 
+        <div className="col-md-3">
+            <div className="card shadow border-0 text-center">
+              <div className="card-body">
+                <h5 className="card-title">Officer profile</h5>
+                <p>View and Update your profile</p>
+                <Link to="/officer/profile" className="btn btn-primary">Go to Profile</Link>
+              </div>
+            </div>
+          </div>
+  
+
+          <div className="col-md-3">
+            <div className="card shadow border-0 text-center">
+              <div className="card-body">
+                <h5 className="card-title">Add Policy Form</h5>
+                <p>Add new policy</p>
+                <Link to="/officer/add-policy-form" className="btn btn-primary">Add Policy</Link>
+              </div>
+            </div>
+          </div>
+          {/* Logout section */}
           <div className="col-md-3">
             <div className="card shadow border-0 text-center">
               <div className="card-body">

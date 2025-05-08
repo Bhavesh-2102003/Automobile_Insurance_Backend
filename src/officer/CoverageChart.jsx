@@ -9,7 +9,7 @@ function CoverageChart() {
     useEffect(() => {
         const getCoverageTypeData = async () => {
             try {
-                // Fetch data from your backend (replace the URL with your actual API endpoint)
+                // Fetch data from the backend for the coverage counts 
                 const response = await axios.get('http://localhost:8087/api/policy/coverage-counts');
                 
                 // Extract the labels (coverage types) and data (counts)

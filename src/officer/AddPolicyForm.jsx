@@ -125,7 +125,6 @@ function AddPolicyForm({ onPolicyAdded }) {
                 <option value="OWN_DAMAGE">Own Damage</option>
                 <option value="THIRD_PARTY">Third Party</option>
                 <option value="COMPREHENSIVE">Comprehensive</option>
-                <option value="ZERO_DEPRECIATION">Zero Depreciation</option>
               </select>
             </div>
           </div>

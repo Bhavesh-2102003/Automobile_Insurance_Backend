@@ -23,6 +23,7 @@ function CustomerList() {
     const [addCountry, setAddCountry] = useState("");
     const [addAddress, setAddAddress] = useState("");
     const [addStatus, setAddStatus] = useState("");
+    const [addErrors, setAddErrors] = useState({});
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
 
@@ -105,8 +106,32 @@ function CustomerList() {
         status: addStatus
     }
     
+    const validateAddCustomer = () => {
+        const errors = {};
+        if (!addFirstName.trim()) errors.firstName = "First name is required.";
+        if (!addLastName.trim()) errors.lastName = "Last name is required.";
+        if (!addContact.trim()) errors.contact = "Contact is required.";
+        else if (!/^\d{10,15}$/.test(addContact.trim())) errors.contact = "Contact must be 10-15 digits.";
+        if (!addEmailAddress.trim()) errors.emailAddress = "Email is required.";
+        else if (!/^\S+@\S+\.\S+$/.test(addEmailAddress.trim())) errors.emailAddress = "Invalid email format.";
+        if (!addGender) errors.gender = "Gender is required.";
+        if (!addDob) errors.dob = "Date of birth is required.";
+        if (!addCity.trim()) errors.city = "City is required.";
+        if (!addState.trim()) errors.state = "State is required.";
+        if (!addCountry.trim()) errors.country = "Country is required.";
+        if (!addAddress.trim()) errors.address = "Address is required.";
+        if (!addStatus) errors.status = "Status is required.";
+        return errors;
+    };
+
     const handleAddCustomer = async ($event) => {
         $event.preventDefault();
+        const errors = validateAddCustomer();
+        if (Object.keys(errors).length > 0) {
+            setAddErrors(errors);
+            return;
+        }
+        setAddErrors({});
         try {
             const token = localStorage.getItem('token');
             await axios.post('http://localhost:8087/api/customer/add', body, {
@@ -157,7 +182,16 @@ function CustomerList() {
                                         <button type="button" className="btn-close" onClick={() => setShowAddModal(false)}></button>
                                     </div>
                                     <div className="modal-body">
-                                        <form onSubmit={handleAddCustomer}>
+                                        <form onSubmit={handleAddCustomer} noValidate>
+                                            {Object.keys(addErrors).length > 0 && (
+                                                <div className="alert alert-danger py-2">
+                                                    <ul style={{ marginBottom: 0 }}>
+                                                        {Object.entries(addErrors).map(([field, msg]) => (
+                                                            <li key={field}>{msg}</li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            )}
                                             <div className="mb-2">
                                                 <label>First Name</label>
                                                 <input type="text" value={addFirstName} className="form-control" onChange={$event => setAddFirstName($event.target.value)}  />
