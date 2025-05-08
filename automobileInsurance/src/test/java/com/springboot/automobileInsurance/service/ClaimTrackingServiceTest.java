@@ -17,11 +17,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.springboot.automobileInsurance.exception.InvalidIDException;
 import com.springboot.automobileInsurance.model.ClaimTracking;
 import com.springboot.automobileInsurance.repository.ClaimTrackingRepository;
 
+@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class ClaimTrackingServiceTest {
 
@@ -34,7 +36,7 @@ public class ClaimTrackingServiceTest {
     private ClaimTracking claimTracking;
     private ClaimTracking claimTracking2;
 
-    @BeforeEach
+    @BeforeEach  // called before and create the sample claim 
     public void setUp() {
         // Setup mock ClaimTracking instances
         claimTracking = new ClaimTracking();

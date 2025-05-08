@@ -13,9 +13,12 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +28,10 @@ import com.springboot.automobileInsurance.exception.InvalidIDException;
 import com.springboot.automobileInsurance.model.ClaimTable;
 import com.springboot.automobileInsurance.repository.ClaimSubmissionRepository;
 
-class ClaimSubmissionServiceTest {
+@SpringBootTest
+@ExtendWith(MockitoExtension.class)
+
+public class ClaimSubmissionServiceTest {
 
     @InjectMocks
     private ClaimSubmissionService claimSubmissionService;
