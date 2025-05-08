@@ -83,5 +83,7 @@ public class ClaimTracking {
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
+
+
 	    
 }

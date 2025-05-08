@@ -51,6 +51,8 @@ public class PolicyDetailsService {
 		
 		return policyDetailsRepository.findAll();
 	}
+	
+	
 	// Prime React chart for count of the coverage types
 	public Map<String, Integer> getCoverageTypeCounts() {
 	    List<PolicyDetails> policies = policyDetailsRepository.findAll();

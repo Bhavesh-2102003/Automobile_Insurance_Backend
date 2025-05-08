@@ -44,10 +44,10 @@ public class SecurityConfig {
 				.requestMatchers("/api/auth/signup").permitAll()
 				.requestMatchers("/api/auth/login").permitAll()
 				.requestMatchers("/api/auth/hello").authenticated()
-				.requestMatchers("/api/officer/add").authenticated()
+				.requestMatchers("/api/officer/add").permitAll()
 				.requestMatchers("/api/officer/username/{username}").authenticated()
 				.requestMatchers("/api/officer/getByuser/{uId}").authenticated()
-				.requestMatchers("/api/officer/profile/{id}").hasAnyAuthority("OFFICER")
+				.requestMatchers("/api/officer/profile/{id}").authenticated()
 				.requestMatchers("/api/officer/profile").authenticated()
 				.requestMatchers("/api/policy-template/add").authenticated()
 				.requestMatchers("/api/policy-template/delete/{id}").authenticated()
@@ -55,13 +55,16 @@ public class SecurityConfig {
 				.requestMatchers("/api/policypricing/owndamage").hasAuthority("OFFICER")
 				.requestMatchers("/api/policypricing/thirdparty").hasAuthority("OFFICER")
 				.requestMatchers("/api/policypricing/comprehensive").hasAuthority("OFFICER")
-				.requestMatchers("/api/claim/all").authenticated()  // need to pass the token in authorization
+				.requestMatchers("/api/claim/all").hasAuthority("OFFICER") // need to pass the token in authorization
+				.requestMatchers("/api/claim/upload/{cId}").authenticated()
+				.requestMatchers("/api/claim/getAll/{cId}").hasAuthority("OFFICER")
+				.requestMatchers("/api/status/count").hasAuthority("OFFICER")
 				.requestMatchers("/api/vehicle/add").permitAll()
 				.requestMatchers("/swagger-ui/**").permitAll()
 				.anyRequest().permitAll()
 			)
 			.sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) 
 		;
 		return http.build();
 	}

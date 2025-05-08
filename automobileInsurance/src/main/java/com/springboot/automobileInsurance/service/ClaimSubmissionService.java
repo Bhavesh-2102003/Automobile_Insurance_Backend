@@ -24,6 +24,8 @@ public class ClaimSubmissionService {
 
 	@Autowired
 	private ClaimSubmissionRepository claimSubmissionRepository;
+	
+	
 
 	public ClaimTable submitClaim(ClaimTable claimTable) {
 		return claimSubmissionRepository.save(claimTable);
@@ -91,5 +93,8 @@ public class ClaimSubmissionService {
 	public int countRejectedClaims() {
 		return claimSubmissionRepository.countByStatus("REJECTED");
 	}
+	
+	
+
 
 }

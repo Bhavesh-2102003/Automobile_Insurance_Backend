@@ -43,7 +43,7 @@ public class JwtFilter extends OncePerRequestFilter{
 		 * using userSecurityService, i will fetch user details by username
 		 * role..
 		 * */
-		final String authorizationHeader = request.getHeader("Authorization");
+		final String authorizationHeader = request.getHeader("Authorization"); //api will pause through 
 		
 		 String username = null;
 	     String jwt = null;
@@ -61,9 +61,9 @@ public class JwtFilter extends OncePerRequestFilter{
 
 	                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = 
 	                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-	                usernamePasswordAuthenticationToken
+	                usernamePasswordAuthenticationToken 
 	                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-	                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+	                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken); // these where you can l,ogin
 	            }
 	            
 	        }

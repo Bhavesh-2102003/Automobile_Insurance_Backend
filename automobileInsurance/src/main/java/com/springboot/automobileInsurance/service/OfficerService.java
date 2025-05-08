@@ -90,6 +90,7 @@ public class OfficerService {
         Officer existingOfficer = optional.get();
 
         // Update fields
+        
         existingOfficer.setContact(officer.getContact());
         
         existingOfficer.setAddress(officer.getAddress());

@@ -84,6 +84,6 @@ public class ClaimSubmissionController {
 		    counts.put("approved", claimSubmissionService.countApprovedClaims());
 		    counts.put("rejected", claimSubmissionService.countRejectedClaims());
 		    return counts;
-		}
+	}
 		
 }
