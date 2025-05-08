@@ -5,14 +5,14 @@ import com.springboot.automobileInsurance.model.PolicyDetails;
 import com.springboot.automobileInsurance.model.VehicleDetails;
 
 /**
- * Utility class to calculate claim amount based on policy type, coverage amount, and vehicle age.
+ * to calculate claim amount based on policy type, coverage amount, and vehicle age.
  */
 public class ClaimAmountCalculator {
 
     /**
      * Calculates the approved claim amount based on the policy type, coverage amount, and vehicle age.
-     * @param claimTable The claim table entity containing references to policy and vehicle.
-     * @return The calculated approved claim amount.
+     claimTable The claim table entity containing references to policy and vehicle.
+     The calculated approved claim amount.
      */
     public static double calculateClaimAmount(ClaimTable claimTable) {
         PolicyDetails policy = claimTable.getPolicyDetails();
