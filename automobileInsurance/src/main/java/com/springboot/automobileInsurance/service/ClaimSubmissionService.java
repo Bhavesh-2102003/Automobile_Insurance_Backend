@@ -94,7 +94,6 @@ public class ClaimSubmissionService {
 		return claimSubmissionRepository.countByStatus("REJECTED");
 	}
 	
-	
 
 
 }
